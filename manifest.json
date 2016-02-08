@@ -1,7 +1,7 @@
 {
   "name": "Pixiv Downloader",
-  "version": "0.1",
   "description": "This extension help you download image from pixiv.",
+  "version": "0.1",
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -14,6 +14,13 @@
     },
     "default_title": "Pixiv Downloader"
   },
+
+  "content_scripts": [
+    {
+      "matches": ["http://www.pixiv.net/*"],
+      "js": ["contentscript.js"]
+    }
+  ],
 
   "permissions": [],
 
