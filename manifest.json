@@ -22,7 +22,9 @@
     }
   ],
 
-  "permissions": [],
+  "permissions": [
+    "declarativeContent"
+  ],
 
   "manifest_version": 2
 }
