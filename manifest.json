@@ -2,10 +2,6 @@
   "name": "Pixiv Downloader",
   "description": "This extension help you download image from pixiv.",
   "version": "0.1",
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
 
   "page_action": {
     "default_icon": {
@@ -25,7 +21,7 @@
   ],
 
   "permissions": [
-    "declarativeContent"
+    "tabs"
   ],
 
   "manifest_version": 2

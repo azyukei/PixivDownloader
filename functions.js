@@ -4,4 +4,4 @@ function parseLinks(links, illust_ids) {
 		var link = links[index];
 		illust_ids.push(link.substr(link.indexOf("id=") + 3, 8));
 	}
-};
+}
