@@ -3,14 +3,6 @@
   "description": "This extension help you download image from pixiv.",
   "version": "0.1",
 
-  "page_action": {
-    "default_icon": {
-      "19": "image/icon19.png",
-      "38": "image/icon38.png"
-    },
-    "default_title": "Pixiv Downloader"
-  },
-
   "options_page": "options.html",
 
   "content_scripts": [
