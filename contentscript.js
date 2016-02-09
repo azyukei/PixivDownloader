@@ -1,6 +1,9 @@
 // 取得 URL 判斷目前位置
+console.log(window.location.href);
 
 // 加入按鈕
+
+
 
 
 
@@ -24,9 +27,3 @@ for (index in illust_ids) {
 
 console.log($("div._layout-thumbnail img:first").attr("src"));
 
-// 取得原圖網址
-// illust_id=55063306
-// img-original=http://i3.pixiv.net/img-original/img/2016/02/03/14/25/17/55063306_p0.jpg
-// 缺少資訊：
-// 相簿的頁數 p0 p1...
-// 相簿的日期時間 2016/02/03/14/25/17
