@@ -1,5 +1,19 @@
 // 取得 URL 判斷目前位置
-console.log(window.location.href);
+var url = window.location.href;
+if (url.search("search.php") > 0) {
+	console.log("搜尋");
+}
+if (url.search("bookmark.php") > 0) {
+	console.log("某人的收藏");
+}
+if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
+	console.log("某人的作品");
+}
+if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
+	console.log("作品詳細");
+}
+
+
 
 // 加入按鈕
 
