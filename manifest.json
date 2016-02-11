@@ -9,6 +9,7 @@
     {
       "matches": ["http://www.pixiv.net/*"],
       "js": ["jquery-2.2.0.min.js", "functions.js", "contentscript.js"],
+      "css": ["style.css"],
       "all_frames": true,
       "run_at": "document_end"
     }
