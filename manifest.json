@@ -16,7 +16,7 @@
   ],
 
   "permissions": [
-    "tabs"
+    "downloads"
   ],
 
   "manifest_version": 2
