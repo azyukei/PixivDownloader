@@ -7,7 +7,7 @@
 
   "background": {
     "persistent": false,
-    "scripts": ["download.js"],
+    "scripts": ["download.js"]
   },
 
   "content_scripts": [
