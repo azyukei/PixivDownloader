@@ -5,6 +5,11 @@
 
   "options_page": "options.html",
 
+  "background": {
+    "persistent": false,
+    "scripts": ["download.js"],
+  },
+
   "content_scripts": [
     {
       "matches": ["http://www.pixiv.net/*"],
