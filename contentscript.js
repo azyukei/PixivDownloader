@@ -1,26 +1,24 @@
 // 作品、相簿、動圖判斷
 $("div._layout-thumbnail").each(function() {
+	$(this).append('<div class="extension-button"><input class="_button view" type="button" value="🔍" /><br><input class="_button ext_btn download" type="button" value="⬇︎" /></div>');
+
 	// $(this).parent("a") 檢查是否為相簿或動圖
 	// $(this).children("img") 獲得能分析出其他需要資訊的 url
 
 	// 檢查相簿 multiple
-	if ($(this).parent().attr("class").search("multiple") > 0) {
-
-		
-	}
+	//if ($(this).parent().attr("class").search("multiple") > 0 && $(this).attr("class").search("ugoku-illust") < 0) {
+	//	$(this).append('<div class="extension-button"><input class="_button view" type="button" value="檢視" /><input class="_button download" type="button" value="下載" />1</div>');
+	//}
 
 	// 檢查動圖 ugoku
-	if ($(this).parent().attr("class").search("ugoku-illust") > 0) {
-		
-
-	}
+	//if ($(this).parent().attr("class").search("ugoku-illust") > 0 && $(this).parent().attr("class").search("multiple") < 0) {
+		//$(this).append('<div class="extension-button"><input class="_button view" type="button" value="檢視" /><input class="_button download" type="button" value="下載" />1</div>');
+	//}
 
 	// 一般插圖
-	if ($(this).parent().attr("class").search("multiple") < 0 && $(this).attr("class").search("ugoku-illust") < 0) {
-
-
-		$(this).children("img").attr("src");
-	}
+	//if ($(this).parent().attr("class").search("multiple") < 0 && $(this).attr("class").search("ugoku-illust") < 0) {
+		
+	//}
 });
 
 // 取得 URL 判斷目前位置並加入按鈕
