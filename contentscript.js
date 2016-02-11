@@ -1,23 +1,32 @@
-// 取得 URL 判斷目前位置
+// 作品、相簿、動圖判斷
+$("div._layout-thumbnail").each(function() {
+	if ($(this).parent().attr("class").search("multiple") > 0) {
+		//console.log("multiple");
+		
+	}
+	if ($(this).parent().attr("class").search("ugoku-illust") > 0) {
+		//console.log("ugoku");
+	}
+	if ($(this).parent().attr("class").search("multiple") < 0 && $(this).attr("class").search("ugoku-illust") < 0) {
+		//console.log("normal");
+		$(this).children("img").attr("src");
+	}
+});
+
+// 取得 URL 判斷目前位置並加入按鈕
 var url = window.location.href;
 if (url.search("search.php") > 0) {
-	console.log("搜尋");
+	$("div.pager-container").append('<span class="_button download_all">整頁下載</a>');
 }
 if (url.search("bookmark.php") > 0) {
-	console.log("某人的收藏");
+	$("div.pager-container").append('<span class="_button download_all">整頁下載</a>');
 }
 if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
-	console.log("某人的作品");
+	$("div.pager-container").append('<span class="_button download_all">整頁下載</a>');
 }
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-	console.log("作品詳細");
+	$("div.bookmark-container").append('<span class="_button download">下載</a>');
 }
-
-
-
-// 加入按鈕
-
-
 
 
 
