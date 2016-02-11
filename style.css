@@ -4,9 +4,7 @@ div._layout-thumbnail:hover div.extension-button {
 div._layout-thumbnail div.extension-button {
     position: absolute;
     display: none;
-}
-div._layout-thumbnail div.extension-button {
-	opacity: 0.8;
+    opacity: 0.8;
     top: 0;
     left: 0;
 }
