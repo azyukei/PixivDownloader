@@ -27,19 +27,38 @@ $("li.image-item").each(function() {
 
 // 點擊預覽圖檢視按鈕
 $("._button.thumbnail-view").click(function() {
-	var url = get_thumbnail_url($(this));
-	var urlData = parse_thumbnail_url(url);
+	var url = get_thumbnail_url( $(this) );
+	var urlData = parse_thumbnail_url( url );
+	if ( is_thumbnail_multiple( $(this) ) ) {
+		// 相簿
+
+	} else if ( is_thumbnail_ugoku( $(this) ) ) {
+		// 動圖
+
+	} else {
+		// 一般
+
+	}
+
 
 });
 
 // 點擊預覽圖下載按鈕
 $("._button.thumbnail-download").click(function() {
-	// 取得 id
-	// 檢查是否為相簿
-		// 取得 相簿頁數
-	// 取得其他資料
-	// 製作原圖連結
-	// 顯示原圖
+	var url = get_thumbnail_url( $(this) );
+	var urlData = parse_thumbnail_url( url );
+	if ( is_thumbnail_multiple( $(this) ) ) {
+		// 相簿
+
+	} else if ( is_thumbnail_ugoku( $(this) ) ) {
+		// 動圖
+
+	} else {
+		// 一般
+		var img_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.jpg";
+		chrome.downloads.download({url: img_original_url});
+	//http://i3.pixiv.net/img-original/img/2014/01/19/11/17/26/41050386_p0.jpg	
+	}
 });
 
 // 點擊插圖下載按鈕
@@ -59,20 +78,3 @@ $("._button.search-download_all").click(function() {
 $("._button.bookmark-download_all").click(function() {
 	alert("整頁下載");
 });
-
-// 作品連結的 Array
-var links = [];
-var illust_ids = [];
-
-// 取得每張作品的連結
-$("a.work").each(function( index ) {
-	links[index] = $(this).attr("href");
-});
-
-parseLinks(links, illust_ids);
-
-for (index in illust_ids) {
-	var illust_id = illust_ids[index];
-	//console.log(illust_id);
-};
-
