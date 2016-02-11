@@ -27,7 +27,9 @@ $("li.image-item").each(function() {
 
 // 點擊預覽圖檢視按鈕
 $("._button.thumbnail-view").click(function() {
-	alert($(this).parent().nextAll("a.work").children("div._layout-thumbnail").children("img").attr("src"));
+	var url = get_thumbnail_url($(this));
+	var urlData = parse_thumbnail_url(url);
+
 });
 
 // 點擊預覽圖下載按鈕
