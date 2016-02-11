@@ -1,10 +1,12 @@
-div._layout-thumbnail:hover div.extension-button {
+li.image-item:hover div.extension-button {
     display: block;
 }
-div._layout-thumbnail div.extension-button {
+li.image-item div.extension-button {
+	z-index: 2;
     position: absolute;
     display: none;
     opacity: 0.8;
     top: 0;
-    left: 0;
+    left: 13px;
+    //padding: 9px;
 }

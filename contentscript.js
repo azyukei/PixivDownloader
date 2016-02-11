@@ -1,6 +1,6 @@
 // 幫預覽圖加入按鈕
-$("div._layout-thumbnail").each(function() {
-	$(this).append('<div class="extension-button"><input class="_button view" type="button" value="🔍" /><br><input class="_button download thumbnail-download" type="button" value="⬇︎" /></div>');
+$("li.image-item").each(function() {
+	$(this).prepend('<div class="extension-button"><input class="_button view" type="button" value="🔍" onclick="alert(1);" /><br><input class="_button download thumbnail-download" type="button" value="⬇︎" /></div>');
 });
 
 // 取得 URL 判斷目前位置並加入按鈕
