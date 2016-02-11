@@ -1,31 +1,33 @@
 // 幫預覽圖加入按鈕
 $("div._layout-thumbnail").each(function() {
-	$(this).append('<div class="extension-button"><input class="_button view" type="button" value="🔍" /><br><input class="_button ext_btn thumbnail-download" type="button" value="⬇︎" /></div>');
+	$(this).append('<div class="extension-button"><input class="_button view" type="button" value="🔍" /><br><input class="_button download thumbnail-download" type="button" value="⬇︎" /></div>');
 });
 
 // 取得 URL 判斷目前位置並加入按鈕
 var url = window.location.href;
 // 搜尋頁
 if (url.search("search.php") > 0) {
-	$("div.pager-container").append('<span class="_button search-download_all">整頁下載</a>');
+	$("div.pager-container").append('<span class="_button download search-download_all">整頁下載</a>');
 }
 
 // 收藏
 if (url.search("bookmark.php") > 0) {
-	$("div.pager-container").append('<span class="_button bookmark-download_all">整頁下載</a>');
+	$("div.pager-container").append('<span class="_button download bookmark-download_all">整頁下載</a>');
 }
 
 // 作品列表
 if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
-	$("div.pager-container").append('<span class="_button member_illust-download_all">整頁下載</a>');
+	$("div.pager-container").append('<span class="_button download member_illust-download_all">整頁下載</a>');
 }
 
 // 插圖
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-	$("div.bookmark-container").append('<span class="_button illust-download">下載</a>');
+	$("div.bookmark-container").append('<span class="_button download illust-download">下載</a>');
 }
 
-
+$(".download").click(function() {
+	console.log($(this).attr("class"));
+});
 
 
 // 作品連結的 Array
