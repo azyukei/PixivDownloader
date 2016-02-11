@@ -18,6 +18,15 @@ function parse_thumbnail_url(url) {
 	};
 }
 
+// 判斷是否為相簿
+function is_thumbnail_multiple(button) {
+	return (button.parent().nextAll("a.work").attr("class").indexOf("multiple") > 0);
+}
+
+// 判斷是否為動圖
+function is_thumbnail_ugoku(button) {
+	return (button.parent().nextAll("a.work").attr("class").indexOf("ugoku-illust") > 0);
+}
 
 // 輸入 a.work > div._layout-thumbnail > img 圖片連結
 // 最後取得原圖的 array
