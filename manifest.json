@@ -19,7 +19,8 @@
     }],
 
     "permissions": [
-        "downloads"
+        "downloads",
+        "*://*.pixiv.net/*"
     ],
 
     "manifest_version": 2
