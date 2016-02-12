@@ -54,14 +54,42 @@ $("._button.thumbnail-download").click(function() {
         // 動圖
 
     } else {
-        // 一般
-        var img_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.jpg";
+        // 一般下載
+        // 原圖建立連結
+        var img_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.png";
 
-        chrome.runtime.sendMessage({
-            download_url: img_original_url
-        }, function(response) {
-            console.log(response.farewell);
-        });
+        // 用 XMLHttpRequest 來請求原圖
+        var downloadRequest = new XMLHttpRequest();
+        downloadRequest.responseType = "blob";
+        downloadRequest.open("GET", img_original_url, true);
+
+        // 請求完成後
+        downloadRequest.onload = function(e) {
+            // 判斷是否成功
+            if (this.status == 200) {
+
+                // 將請求的回應建立成 blob
+                var blob = new Blob([this.response], {
+                    type: 'image/png'
+                });
+
+                // 用 blob 建立影像的連結
+                var urlCreator = window.URL || window.webkitURL;
+                var imageUrl = urlCreator.createObjectURL(blob);
+
+                //傳給 background page 來下載影像
+                chrome.runtime.sendMessage({
+                    download_url: imageUrl
+                }, function(response) {
+                    console.log(response.farewell);
+                });
+            }
+        };
+
+        // 傳送請求
+        downloadRequest.send();
+
+
 
         //chrome.downloads.download({url: img_original_url});
         //http://i3.pixiv.net/img-original/img/2014/01/19/11/17/26/41050386_p0.jpg	
