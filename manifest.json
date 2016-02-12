@@ -1,28 +1,26 @@
 {
-  "name": "Pixiv Downloader",
-  "description": "This extension help you download image from pixiv.",
-  "version": "0.1",
+    "name": "Pixiv Downloader",
+    "description": "This extension help you download image from pixiv.",
+    "version": "0.1",
 
-  "options_page": "options.html",
+    "options_page": "options.html",
 
-  "background": {
-    "persistent": false,
-    "scripts": ["download.js"]
-  },
+    "background": {
+        "persistent": false,
+        "scripts": ["download.js"]
+    },
 
-  "content_scripts": [
-    {
-      "matches": ["http://www.pixiv.net/*"],
-      "js": ["jquery-2.2.0.min.js", "functions.js", "contentscript.js"],
-      "css": ["style.css"],
-      "all_frames": true,
-      "run_at": "document_end"
-    }
-  ],
+    "content_scripts": [{
+        "matches": ["http://www.pixiv.net/*"],
+        "js": ["jquery-2.2.0.min.js", "functions.js", "contentscript.js"],
+        "css": ["style.css"],
+        "all_frames": true,
+        "run_at": "document_end"
+    }],
 
-  "permissions": [
-    "downloads"
-  ],
+    "permissions": [
+        "downloads"
+    ],
 
-  "manifest_version": 2
+    "manifest_version": 2
 }
