@@ -25,65 +25,12 @@ $("li.image-item").each(function() {
 $(".ext_button").click(function(){
 	var works = get_works($(this));
 	parse_works(works, function(source_links) {
+		console.log(source_links);
 		check_source_type(source_links, function(type) {
-			request_source(source_links, type, function(blob) {
+			request_source(source_links, status, function(blob) {
 				var download_url = get_download_url(blob);
 				send_download_message(download_url);
 			});
 		});
 	});
-});
-
-
-// 點擊預覽圖下載按鈕
-$("._button.thumbnail-download").click(function() {
-    var url = get_thumbnail_url($(this));
-    var urlData = parse_thumbnail_url(url);
-    if (is_thumbnail_multiple($(this))) {
-        // 相簿
-
-    } else if (is_thumbnail_ugoku($(this))) {
-        // 動圖
-
-    } else {
-        // 一般下載
-        // 建立原圖連結
-        var png_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.png";
-        var jpg_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.jpg";
-
-        // 用 XMLHttpRequest 來請求原圖
-        var downloadRequest = new XMLHttpRequest();
-        downloadRequest.responseType = "blob";
-        downloadRequest.open("GET", png_original_url, true);
-
-        // 請求完成後
-        downloadRequest.onload = function(e) {
-            // 200 成功
-            if (this.status == 200) {
-                // 將請求的回應建立成 blob
-                var blob = new Blob([this.response], {
-                    type: 'image/png'
-                });
-                var download_url = get_download_url(blob); // 用 blob 建立影像的連結
-                send_download_message(download_url); // 傳給 background page 來下載影像
-
-            } else if (this.status == 404) {
-                // 404 png 不存在 改傳送 jpg 請求
-                downloadRequest.open("GET", jpg_original_url, true);
-                downloadRequest.onload = function(e) {
-                    // 200 成功
-                    if (this.status == 200) {
-                        // 將請求的回應建立成 blob
-                        var blob = new Blob([this.response], {
-                            type: 'image/jpeg'
-                        });
-                        var download_url = get_download_url(blob); // 用 blob 建立影像的連結
-                        send_download_message(download_url); // 傳給 background page 來下載影像
-                    }
-                };
-                downloadRequest.send(); // 第二次傳送請求
-            }
-        };
-        downloadRequest.send(); // 傳送請求
-    }
 });

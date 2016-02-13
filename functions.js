@@ -116,7 +116,6 @@ function parse_works(works, callback) {
                     var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
                     source_links.push(source_link);
                 }
-                callback(source_links);
             });
 
         } else if (works[i].ugoku) {
@@ -127,9 +126,9 @@ function parse_works(works, callback) {
             // 取得 ix, date, time, id
             var ill_data = parse_img_src(works[i].img_src);
             source_links.push("http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p0");
-            callback(source_links);
         }
     }
+    callback(source_links);
 }
 
 /** 
@@ -215,10 +214,9 @@ function check_source_type(source_links, callback) {
     };
 }
 
-function request_source(source_links, type, callback) {
+function request_source(source_links, status, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-    xhr.open("GET", source_links[0] + type);
     xhr.onload = function(e) {
         if (this.status == 200) {
             var blob
@@ -236,7 +234,11 @@ function request_source(source_links, type, callback) {
             console.log(this.status);
         }
     }
-    xhr.send();
+    for (var i = 0; i < source_links.length; i++) {
+    	console.log("Download[" + i + "]: " + source_links[i]);
+    	xhr.open("GET", source_links[i] + type);
+    	xhr.send();
+    }
 }
 
 /**
