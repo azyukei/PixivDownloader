@@ -80,7 +80,7 @@ function get_works(button) {
         // 選出 a.work
         var a_work = $(button).parent().parent().find("a.work");
 
-        // 塞進 works
+        // 塞進 worksg
         works.push({
             "link": a_work.attr("href"),
             "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
@@ -169,7 +169,7 @@ function request_multiple_works(manga_link, callback) {
  * @param  {string} url
  * @return {object} Illust data, for  download image.
  */
-function parse_work_url(link) {
+function parse_img_src(link) {
     var ix = link.substr(link.indexOf("//i") + 3, 1);
     var date = link.substr(link.indexOf("img/") + 4, 10);
     var time = link.substr(link.indexOf("img/") + 15, 8);
