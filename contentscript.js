@@ -17,7 +17,7 @@ if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
 
 // 插圖
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-    $("div.bookmark-container").prepend('<span class="_button illust-download">下載</a>');
+    $("div.bookmark-container").append('<span class="_button illust-download" style="float: right">下載</a>');
 }
 
 // 幫預覽圖加入按鈕
@@ -98,7 +98,7 @@ $("._button.thumbnail-download").click(function() {
 
 // 點擊插圖下載按鈕
 $("._button.illust-download").click(function() {
-    check_multipul();
+    var url = get_thumbnail_url($(this));
 });
 
 // 點擊搜尋頁整頁下載按鈕
