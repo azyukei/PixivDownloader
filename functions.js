@@ -61,12 +61,23 @@ function get_image_source(links, callback) {
 }
 
 /**
- * 
- * @param  {[type]} link	
- * @param  {Function} callbak
- * @return {[type]}
+ * 用 Blob 建立下載連結
+ * @param  {Blob} blob
+ * @return {string} download_url
  */
-function illust_request(link, callback) {
-    var xmlhttp = new XMLHttpRequest();
+function get_download_url(blob) {
+    var urlCreator = window.URL || window.webkitURL;
+    return urlCreator.createObjectURL(blob);
+}
 
+/**
+ * 傳送下載連結給 background page 請他下載檔案
+ * @param  {string} download_url
+ */
+function send_download_message(download_url) {
+    chrome.runtime.sendMessage({
+        download_url: download_url
+    }, function(response) {
+        console.log(response.farewell);
+    });
 }

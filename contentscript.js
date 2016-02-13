@@ -17,7 +17,7 @@ if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
 
 // 插圖
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-    $("div.bookmark-container").append('<span class="_button illust-download">下載</a>');
+    $("div.bookmark-container").prepend('<span class="_button illust-download">下載</a>');
 }
 
 // 幫預覽圖加入按鈕
@@ -55,44 +55,44 @@ $("._button.thumbnail-download").click(function() {
 
     } else {
         // 一般下載
-        // 原圖建立連結
-        var img_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.png";
+        // 建立原圖連結
+        var png_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.png";
+        var jpg_original_url = "http://i" + urlData.ix + ".pixiv.net/img-original/img/" + urlData.date + "/" + urlData.time + "/" + urlData.id + "_p0.jpg";
 
         // 用 XMLHttpRequest 來請求原圖
         var downloadRequest = new XMLHttpRequest();
         downloadRequest.responseType = "blob";
-        downloadRequest.open("GET", img_original_url, true);
+        downloadRequest.open("GET", png_original_url, true);
 
         // 請求完成後
         downloadRequest.onload = function(e) {
-            // 判斷是否成功
+            // 200 成功
             if (this.status == 200) {
-
                 // 將請求的回應建立成 blob
                 var blob = new Blob([this.response], {
                     type: 'image/png'
                 });
+                var download_url = get_download_url(blob); // 用 blob 建立影像的連結
+                send_download_message(download_url); // 傳給 background page 來下載影像
 
-                // 用 blob 建立影像的連結
-                var urlCreator = window.URL || window.webkitURL;
-                var imageUrl = urlCreator.createObjectURL(blob);
-
-                //傳給 background page 來下載影像
-                chrome.runtime.sendMessage({
-                    download_url: imageUrl
-                }, function(response) {
-                    console.log(response.farewell);
-                });
+            } else if (this.status == 404) {
+                // 404 png 不存在 改傳送 jpg 請求
+                downloadRequest.open("GET", jpg_original_url, true);
+                downloadRequest.onload = function(e) {
+                    // 200 成功
+                    if (this.status == 200) {
+                        // 將請求的回應建立成 blob
+                        var blob = new Blob([this.response], {
+                            type: 'image/jpeg'
+                        });
+                        var download_url = get_download_url(blob); // 用 blob 建立影像的連結
+                        send_download_message(download_url); // 傳給 background page 來下載影像
+                    }
+                };
+                downloadRequest.send(); // 第二次傳送請求
             }
         };
-
-        // 傳送請求
-        downloadRequest.send();
-
-
-
-        //chrome.downloads.download({url: img_original_url});
-        //http://i3.pixiv.net/img-original/img/2014/01/19/11/17/26/41050386_p0.jpg	
+        downloadRequest.send(); // 傳送請求
     }
 });
 
