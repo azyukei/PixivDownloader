@@ -104,7 +104,7 @@ function get_works(button) {
         // 一般作品使用圖片連結
         if (!(work.multiple || work.ugoku)) {
             // 取得 img src
-        	work.link a_work.children("div._layout-thumbnail").children("img").attr("src");
+        	work.link = a_work.children("div._layout-thumbnail").children("img").attr("src");
         }
 
         works.push(work);
