@@ -1,29 +1,31 @@
 // 取得 URL 判斷目前位置並加入按鈕
 var url = window.location.href;
-// 搜尋頁
-if (url.search("search.php") > 0) {
-    $("div.pager-container").append('<span class="_button ext_button search_download_all">整頁下載</a>');
-}
 
-// 收藏
+// 加入收藏按鈕
 if (url.search("bookmark.php") > 0) {
-    $("div.pager-container").append('<span class="_button ext_button bookmark_download_all">整頁下載</a>');
+    $("nav.column-order-menu").append('<span class="_button ext_button bookmark_download_all">整頁下載</a>');
 }
 
-// 作品列表
+// 加入作品列表按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
-    $("div.pager-container").append('<span class="_button ext_button member_illust_download_all">整頁下載</a>');
+    $("ul.column-order-menu").append('<span class="_button ext_button member_illust_download_all">整頁下載</a>');
 }
 
-// 插圖
+// 加入插圖按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
     $("div.bookmark-container").append('<span class="_button ext_button illust_download" style="float: right">下載</a>');
 }
 
-// 幫預覽圖加入按鈕
+// 加入預覽圖按鈕
 $("li.image-item").each(function() {
     $(this).prepend('<div class="extension-button"><input class="_button ext_button thumbnail_view" type="button" value="🔍" /><br><input class="_button ext_button thumbnail_download" type="button" value="⬇︎" /></div>');
 });
+
+// 按下擴充功能按鈕
+$(".ext_button").click(function(){
+	get_thumbnail_url($(this));
+});
+
 
 // 點擊預覽圖檢視按鈕
 $("._button.thumbnail-view").click(function() {

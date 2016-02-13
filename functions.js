@@ -1,16 +1,28 @@
 /**
- * thumbnail 按鈕用，傳入按鈕 selector 回傳 url
+ * 傳入按鈕 selector ，判斷現在頁面，取得 thumbnail url 並回傳
  * @param  {object} button	jQuery selected button.
  * @return {string} div._layout-thumbnail > img src
  */
 function get_thumbnail_url(button) {
-    if (button.attr("class").indexOf("thumbnail-download") > 0) {
-        return button.parent().nextAll("a.work").children("div._layout-thumbnail").children("img").attr("src");
-    }
-
-    if (button.attr("class").indexOf("illust-download") > 0 ) {
+	
+    // 收藏
+    if (button.attr("class").indexOf("bookmark_download_all") > 0) {
         $()
 
+    }
+    // 作品列表
+    if (button.attr("class").indexOf("member_illust_download_all") > 0) {
+        $()
+
+    }
+    // 插圖
+    if (button.attr("class").indexOf("illust_download") > 0) {
+        $()
+
+    }
+    // 預覽圖
+    if (button.attr("class").indexOf("thumbnail_view") > 0 || button.attr("class").indexOf("thumbnail_download") > 0) {
+        return [button.parent().nextAll("a.work").children("div._layout-thumbnail").children("img").attr("src")];
     }
 }
 

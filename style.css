@@ -10,3 +10,19 @@ li.image-item div.extension-button {
     top: 0;
     left: 13px;
 }
+
+nav.column-order-menu span.ext_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 7px;
+    margin-right: 7px;
+}
+
+ul.column-order-menu span.ext_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 7px;
+    margin-right: 7px;
+}
