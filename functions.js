@@ -18,19 +18,12 @@ function get_works(button) {
 
                 // 將資料塞進 works
                 a_work.each(function() {
-                    var work = {
+                    works.push({
                         "link": $(this).attr("href"),
+                        "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                         "multiple": is_multiple_work($(this)),
                         "ugoku": is_ugoku_work($(this))
-                    };
-
-                    // 一般作品使用圖片連結
-                    if (!(work.multiple || work.ugoku)) {
-                        // 取得 img src
-                        work.link = $(this).children("div._layout-thumbnail").children("img").attr("src");
-                    }
-
-                    works.push(work);
+                    });
                 });
             }
         });
@@ -43,19 +36,12 @@ function get_works(button) {
 
         // 將資料塞進 works
         a_work.each(function() {
-            var work = {
+            works.push({
                 "link": $(this).attr("href"),
+                "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                 "multiple": is_multiple_work($(this)),
                 "ugoku": is_ugoku_work($(this))
-            };
-
-            // 一般作品使用圖片連結
-            if (!(work.multiple || work.ugoku)) {
-                // 取得 img src
-                work.link = $(this).children("div._layout-thumbnail").children("img").attr("src");
-            }
-
-            works.push(work);
+            });
         });
     }
 
@@ -67,6 +53,7 @@ function get_works(button) {
         // 建立 work
         var work = {
             "link": window.location.href,
+            "img_src": "",
             "multiple": false,
             "ugoku": false
         }
@@ -75,6 +62,7 @@ function get_works(button) {
         if (works_display.find("._work").length == 1) {
             // 相簿
             work.multiple = true;
+            work.link = works_display.find("img").attr("src");
         } else if (works_display.find("canvas").length == 1) {
             // 動圖
             work.ugoku = true;
@@ -92,22 +80,13 @@ function get_works(button) {
         // 選出 a.work
         var a_work = $(button).parent().parent().find("a.work");
 
-
-
-        // 建立works
-        var work = {
+        // 塞進 works
+        works.push({
             "link": a_work.attr("href"),
+            "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
             "multiple": is_multiple_work(a_work),
             "ugoku": is_ugoku_work(a_work)
-        };
-
-        // 一般作品使用圖片連結
-        if (!(work.multiple || work.ugoku)) {
-            // 取得 img src
-            work.link = a_work.children("div._layout-thumbnail").children("img").attr("src");
-        }
-
-        works.push(work);
+        });
     }
 
     return works;
