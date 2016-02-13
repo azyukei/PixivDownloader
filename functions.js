@@ -62,13 +62,13 @@ function get_works(button) {
         if (works_display.find("._work").length == 1) {
             // 相簿
             work.multiple = true;
-            work.link = works_display.find("img").attr("src");
+            work.img_src = works_display.find("img").attr("src");
         } else if (works_display.find("canvas").length == 1) {
             // 動圖
             work.ugoku = true;
         } else {
             // 一般作品使用圖片連結
-            work.link = works_display.find("img").attr("src");
+            work.img_src = works_display.find("img").attr("src");
         }
 
         // 塞進 works
@@ -111,7 +111,7 @@ function parse_works(works, callback) {
             // 取得 manga link
             var manga_link = get_manga_link(works[i].link);
             // 取得作品頁數
-            var p_max = request_multiple_works(manga_link, function(p_max) {
+            var p_max = get_work_pages(manga_link, function(p_max) {
                 for (var i = 0; i < p_max; i++) {
                     var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
                     source_links.push(source_link);
@@ -147,7 +147,7 @@ function get_manga_link(link) {
  * @param  {string} manga_link
  * @return {string} p_max
  */
-function request_multiple_works(manga_link, callback) {
+function get_work_pages(manga_link, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", manga_link, true);
     xhr.onload = function() {
@@ -218,7 +218,7 @@ function check_source_type(source_links, callback) {
 function request_source(source_links, type, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-    xhr.open("GET", source_links[0] + "type");
+    xhr.open("GET", source_links[0] + type);
     xhr.onload = function(e) {
         if (this.status == 200) {
             var blob
