@@ -13,7 +13,7 @@ if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
 
 // 加入插圖按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-    $("div.bookmark-container").append('<span class="_button ext_button illust_download" style="float: right">下載</a>');
+    $("div.bookmark-container").append('<span class="_button ext_button illust_download">下載</a>');
 }
 
 // 加入預覽圖按鈕

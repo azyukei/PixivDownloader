@@ -26,3 +26,11 @@ ul.column-order-menu span.ext_button {
     margin-top: 7px;
     margin-right: 7px;
 }
+
+div.bookmark-container span.ext_button {
+    float: right;
+}
+
+a.edit-bookmark.button-on + span.ext_button {
+    margin-top: -2px;
+}
