@@ -23,7 +23,8 @@ $("li.image-item").each(function() {
 
 // 按下擴充功能按鈕
 $(".ext_button").click(function(){
-	get_thumbnail_url($(this));
+	var works = get_works($(this));
+	console.log(works);
 });
 
 

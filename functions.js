@@ -1,29 +1,63 @@
 /**
- * 傳入按鈕 selector ，判斷現在頁面，取得 thumbnail url 並回傳
+ * 傳入按鈕 selector ，判斷現在頁面，取得 works {"link": a.work.href, "multiple": boolean, "ugoku":boolean} 並回傳
  * @param  {object} button	jQuery selected button.
- * @return {string} div._layout-thumbnail > img src
+ * @return {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
  */
-function get_thumbnail_url(button) {
-	
+function get_works(button) {
+
+    var works = [];
+
     // 收藏
     if (button.attr("class").indexOf("bookmark_download_all") > 0) {
-        $()
+        // 找出每個 _image-items
+        $("ul._image-items").each(function() {
+            // 排除推薦的作品
+            if ($(this).attr("class").indexOf("no-response") < 0) {
+                // 選出 a.work
+                var work = $(this).children("li.image-item").children("a.work");
 
+                // 將資料塞進 works
+                work.each(function() {
+                    // 取得 img src
+                    var img_src = $(this).children("div._layout-thumbnail").children("img").attr("src");
+                    works.push({
+                        "link": img_src,
+                        "multiple": is_multiple_work($(this)),
+                        "ugoku": is_ugoku_work($(this))
+                    });
+                });
+            }
+        });
     }
+
     // 作品列表
     if (button.attr("class").indexOf("member_illust_download_all") > 0) {
-        $()
+        // 選出 a.work
+        var work = $("ul._image-items > li.image-item > a.work");
+
+        // 將資料塞進 works
+        work.each(function() {
+            // 取得 img src
+            var img_src = $(this).children("div._layout-thumbnail").children("img").attr("src");
+            works.push({
+                "link": img_src,
+                "multiple": is_multiple_work($(this)),
+                "ugoku": is_ugoku_work($(this))
+            });
+        });
 
     }
     // 插圖
     if (button.attr("class").indexOf("illust_download") > 0) {
-        $()
+        
 
     }
     // 預覽圖
     if (button.attr("class").indexOf("thumbnail_view") > 0 || button.attr("class").indexOf("thumbnail_download") > 0) {
         return [button.parent().nextAll("a.work").children("div._layout-thumbnail").children("img").attr("src")];
     }
+
+    return works;
 }
 
 /**
@@ -47,20 +81,20 @@ function parse_thumbnail_url(url) {
 
 /**
  * 判斷是否為相簿
- * @param  {object} button	jQuery selected button.
+ * @param  {object} work	jQuery selected a.work.
  * @return {Boolean} Is target an album or manga.
  */
-function is_thumbnail_multiple(button) {
-    return (button.parent().nextAll("a.work").attr("class").indexOf("multiple") > 0);
+function is_multiple_work(work) {
+    return (work.attr("class").indexOf("multiple") > 0);
 }
 
 /**
  * 判斷是否為動圖
- * @param  {object} button	jQuery selected button.
+ * @param  {object} work	jQuery selected a.work.
  * @return {Boolean} Is target a ugoku.
  */
-function is_thumbnail_ugoku(button) {
-    return (button.parent().nextAll("a.work").attr("class").indexOf("ugoku-illust") > 0);
+function is_ugoku_work(work) {
+    return (work.attr("class").indexOf("ugoku-illust") > 0);
 }
 
 
