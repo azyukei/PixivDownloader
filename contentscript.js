@@ -28,24 +28,6 @@ $(".ext_button").click(function(){
 });
 
 
-// 點擊預覽圖檢視按鈕
-$("._button.thumbnail-view").click(function() {
-    var url = get_thumbnail_url($(this));
-    var urlData = parse_thumbnail_url(url);
-    if (is_thumbnail_multiple($(this))) {
-        // 相簿
-
-    } else if (is_thumbnail_ugoku($(this))) {
-        // 動圖
-
-    } else {
-        // 一般
-
-    }
-
-
-});
-
 // 點擊預覽圖下載按鈕
 $("._button.thumbnail-download").click(function() {
     var url = get_thumbnail_url($(this));
@@ -97,22 +79,4 @@ $("._button.thumbnail-download").click(function() {
         };
         downloadRequest.send(); // 傳送請求
     }
-});
-
-// 點擊插圖下載按鈕
-$("._button.illust-download").click(function() {
-    var url = get_thumbnail_url($(this));
-});
-
-// 點擊搜尋頁整頁下載按鈕
-$("._button.search-download_all").click(function() {
-    // 取得整頁 id 陣列
-    // 檢查是否為相簿
-
-    alert("整頁下載");
-});
-
-// 點擊插圖下載按鈕
-$("._button.bookmark-download_all").click(function() {
-    alert("整頁下載");
 });

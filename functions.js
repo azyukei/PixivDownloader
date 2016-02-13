@@ -7,7 +7,7 @@ function get_works(button) {
 
     var works = [];
 
-    // 收藏
+    // 收藏 - 整頁下載
     if (button.attr("class").indexOf("bookmark_download_all") > 0) {
         // 找出每個 _image-items
         $("ul._image-items").each(function() {
@@ -30,7 +30,7 @@ function get_works(button) {
         });
     }
 
-    // 作品列表
+    // 作品列表 - 整頁下載
     if (button.attr("class").indexOf("member_illust_download_all") > 0) {
         // 選出 a.work
         var work = $("ul._image-items > li.image-item > a.work");
@@ -47,14 +47,51 @@ function get_works(button) {
         });
 
     }
-    // 插圖
-    if (button.attr("class").indexOf("illust_download") > 0) {
-        
 
+    // 插圖 - 下載
+    if (button.attr("class").indexOf("illust_download") > 0) {
+        // 選出 div.works_display
+        var works_display = $("div.works_display");
+
+        // 建立 work
+        var work = {
+            "link": "",
+            "multiple": false,
+            "ugoku": false
+        }
+
+        // 判斷類型寫入資料
+        if (works_display.find("._work").length == 1) {
+            // 相簿
+            work.link = works_display.find("img").attr("src");
+            work.multiple = true;
+        } else if (works_display.find("canvas").length == 1) {
+            // 動圖
+            work.link = window.location.href;
+            work.ugoku = true;
+        } else {
+            // 一般
+            work.link = works_display.find("img").attr("src");
+        }
+
+        // 塞進 works
+        works.push(work);
     }
-    // 預覽圖
+
+    // 預覽圖 - view 或 download
     if (button.attr("class").indexOf("thumbnail_view") > 0 || button.attr("class").indexOf("thumbnail_download") > 0) {
-        return [button.parent().nextAll("a.work").children("div._layout-thumbnail").children("img").attr("src")];
+        // 選出 a.work
+        var work = $(button).parent().parent().find("a.work");
+
+        // 取得 img src
+        var img_src = work.children("div._layout-thumbnail").children("img").attr("src");
+
+        // 塞進 works
+        works.push({
+            "link": img_src,
+            "multiple": is_multiple_work(work),
+            "ugoku": is_ugoku_work(work)
+        });
     }
 
     return works;
@@ -65,7 +102,7 @@ function get_works(button) {
  * @param  {string} url
  * @return {object} Illust data, for  download image.
  */
-function parse_thumbnail_url(url) {
+function parse_work_url(url) {
     // url = http://i3.pixiv.net/c/150x150/img-master/img/2015/12/16/18/28/45/54069002_p0_master1200.jpg
     var ix = url.substr(url.indexOf("//i") + 3, 1);
     var date = url.substr(url.indexOf("img/") + 4, 10);
