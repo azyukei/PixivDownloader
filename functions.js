@@ -113,8 +113,8 @@ function parse_works(works, callback) {
             // 取得作品頁數
             var p_max = request_multiple_works(manga_link, function(p_max) {
                 for (var i = 0; i < p_max; i++) {
-                	var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
-                	source_links.push(source_link);
+                    var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
+                    source_links.push(source_link);
                 }
                 callback(source_links);
             });
@@ -199,7 +199,47 @@ function is_ugoku_work(work) {
     return (work.attr("class").indexOf("ugoku-illust") > 0);
 }
 
+function check_source_type(source_links, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.open("GET", source_links[0] + "png");
+    xhr.send();
+    xhr.onload = function() {
+        if (this.status == 404) {
+        	callback("jpg");
+            request_source(source_links, "jpg", callback);
+        } else if (this.status == 200) {
+        	callback("png");
+            request_source(source_links, "png", callback);
+        } else {
+            console.log(this.status);
+        }
+    };
+}
 
+function request_source(source_links, type, callback) {
+    ar xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.open("GET", source_links[0] + "type");
+    xhr.onload = function(e) {
+        if (this.status == 200) {
+            var blob
+            if (type == "png") {
+                blob = new Blob([this.response], {
+                    type: 'image/png'
+                });
+            } else {
+            	blob = new Blob([this.response], {
+                    type: 'image/jpeg'
+                });
+            }
+            callback(blob);
+        } else {
+            console.log(this.status);
+        }
+    }
+    xhr.send();
+}
 
 /**
  * 用 Blob 建立下載連結
