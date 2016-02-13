@@ -92,7 +92,7 @@ function get_works(button) {
         // 選出 a.work
         var a_work = $(button).parent().parent().find("a.work");
 
-        
+
 
         // 建立works
         var work = {
@@ -104,7 +104,7 @@ function get_works(button) {
         // 一般作品使用圖片連結
         if (!(work.multiple || work.ugoku)) {
             // 取得 img src
-        	work.link = a_work.children("div._layout-thumbnail").children("img").attr("src");
+            work.link = a_work.children("div._layout-thumbnail").children("img").attr("src");
         }
 
         works.push(work);
@@ -126,13 +126,22 @@ function parse_works(works) {
     for (i in works) {
 
         var link_data = {
-
+            "ix": "",
+            "date": "",
+            "time": "",
+            "id": "",
+            "px": "0"
         }
 
         if (works[i].multiple) {
             // 相簿
-            // Request
-            var p_max = request_multiple_works(works[i]);
+			var manga_link = get_manga_link(works[i].link);
+            var p_max = request_multiple_works(manga_link);
+            if (p_max > 0) {
+            	for (var i = 0; i < p_max; i++) {
+            		
+            	}
+            }
 
         } else if (works[i].ugoku) {
             // 動圖
@@ -146,8 +155,36 @@ function parse_works(works) {
     return link_datas;
 }
 
-function request_multiple_works(work) {
+/** 
+ * 將相簿作品連結變成漫畫連結
+ * @param  {string} link
+ * @return {string} manga_link
+ */
+function get_manga_link(link) {
+	var manga_link = link.replace("medium", "manga");
+	return manga_link;
+}
 
+/**
+ * 分析漫畫連結來取得作品頁數
+ * @param  {string} manga_link
+ * @return {string} p_max
+ */
+function request_multiple_works(manga_link) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", manga_link, true);
+    xhr.onload = function() {
+        // 200 成功
+        if (this.status == 200) {
+        	var html = parseHTML(this.response);
+        	return html.find("span.total").val();
+        } else {
+        	console.log(this.status);
+        }
+    };
+    xhr.send();
+
+    return -1;
 }
 
 /**
@@ -156,7 +193,6 @@ function request_multiple_works(work) {
  * @return {object} Illust data, for  download image.
  */
 function parse_work_url(link) {
-    // link = http://i3.pixiv.net/c/150x150/img-master/img/2015/12/16/18/28/45/54069002_p0_master1200.jpg
     var ix = link.substr(link.indexOf("//i") + 3, 1);
     var date = link.substr(link.indexOf("img/") + 4, 10);
     var time = link.substr(link.indexOf("img/") + 15, 8);
