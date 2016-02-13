@@ -92,12 +92,6 @@ function get_works(button) {
     return works;
 }
 
-
-/**
- * 
- * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
- */
-
 /**
  * 解析 works 中的 url 取得其他要用的資料
  * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
@@ -136,8 +130,6 @@ function parse_works(works, callback) {
             callback(source_links);
         }
     }
-
-    
 }
 
 /** 
