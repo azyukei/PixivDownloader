@@ -22,35 +22,33 @@ $("li.image-item").each(function() {
 });
 
 // 按下擴充功能按鈕
-$(".ext_button").click(function(){
-	var works = get_works($(this));
-	parse_img_src(works);
-	get_manga_link(works);
+$(".ext_button").click(function() {
+    var works = get_works($(this));
+    parse_img_src(works);
+    get_manga_link(works);
 
-	// 非同步函式
-	for (var i = 0; i < works.length; i++) {
+    // 非同步函式
+    for (var i = 0; i < works.length; i++) {
 
-		get_work_pages(works[i], function(work) {
-			console.log(work);
-			get_source_link(work);
-			console.log(work);
-			request_source_png(work, function(blob) {
-				console.log(blob);
-				var download_url = get_download_url(blob);
-				console.log(download_url);
-				send_download_message(download_url);
+        get_work_pages(works[i], function(work) {
 
-			});
+            get_source_link(work);
 
-			request_source_jpg(work, function(blob) {
-				console.log(blob);
-				var download_url = get_download_url(blob);
-				console.log(download_url);
-				send_download_message(download_url);
+            // 先請求 png，不行的話先用第一個 callback 改請求 jpg
+            request_source_png(work, function(work) {
+                // 非 png 改成請求 jpg
+                request_source_jpg(work, function(blob) {
+                    // jpg blob
+                    var download_url = get_download_url(blob);
+                    send_download_message(download_url);
 
-			});
+                });
+            }, function(blob) {
+            	// png blob
+                var download_url = get_download_url(blob);
+                send_download_message(download_url);
 
-		});
-
-	}
+            });
+        });
+    }
 });
