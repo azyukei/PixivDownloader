@@ -27,4 +27,30 @@ $(".ext_button").click(function(){
 	parse_img_src(works);
 	get_manga_link(works);
 
+	// 非同步函式
+	for (var i = 0; i < works.length; i++) {
+
+		get_work_pages(works[i], function(work) {
+			console.log(work);
+			get_source_link(work);
+			console.log(work);
+			request_source_png(work, function(blob) {
+				console.log(blob);
+				var download_url = get_download_url(blob);
+				console.log(download_url);
+				send_download_message(download_url);
+
+			});
+
+			request_source_jpg(work, function(blob) {
+				console.log(blob);
+				var download_url = get_download_url(blob);
+				console.log(download_url);
+				send_download_message(download_url);
+
+			});
+
+		});
+
+	}
 });

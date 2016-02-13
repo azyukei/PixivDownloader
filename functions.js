@@ -1,7 +1,7 @@
 /**
- * 傳入按鈕 selector ，判斷現在頁面，取得 works {"link": a.work.href, "multiple": boolean, "ugoku":boolean} 並回傳
+ * 傳入按鈕 selector ，判斷現在頁面，建立 works 並回傳
  * @param  {object} button	jQuery selected button.
- * @return {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
+ * @return {[object]} works [work]
  */
 function get_works(button) {
 
@@ -160,8 +160,7 @@ function is_ugoku_work(a_work) {
 
 /**
  * 解析 url 拿到需要用的資料
- * @param  {string} url
- * @return {object} Illust data, for  download image.
+ * @param  {[object]} url
  */
 function parse_img_src(works) {
     for (var i = 0; i < works.length; i++) {
@@ -174,7 +173,7 @@ function parse_img_src(works) {
 
 /** 
  * 將相簿作品連結變成漫畫連結
- * @param  {string} link
+ * @param  {[object]} works
  * @return {string} manga_link
  */
 function get_manga_link(works) {
@@ -188,42 +187,53 @@ function get_manga_link(works) {
 
 /**
  * 分析漫畫連結來取得作品頁數
- * @param  {string} manga_link
- * @return {string} p_max
+ * @param  {object} work
+ * @return {string} pages
  */
-function get_work_pages(works, callback) {
+function get_work_pages(work, callback) {
     var xhr = new XMLHttpRequest();
-    for (var i = 0; i < works.length; i++) {
-        xhr.open("GET", get_manga_link(works[i].link), true);
-        xhr.send();
-    }
+    xhr.open("GET", work.manga_link, true);
+    xhr.send();
 
     xhr.onload = function() {
         // 200 成功
         if (this.status == 200) {
             var html = $.parseHTML(this.response);
-            var p_max = $(html).find("span.total").text();
-            callback();
+            work.pages = $(html).find("span.total").text();
+            
+            callback(work);
         } else {
             console.log(this.status);
         }
     }
-
 }
 
+/**
+ * 組成原圖連結
+ * @param  {object} work
+ */
+function get_source_link(work) {
+    for (var i = 0; i < work.pages; i++) {
+        work.source_links[i] = "http://i" + work.site + ".pixiv.net/img-original/img/" + work.date + "/" + work.time + "/" + work.id;
+    }
+}
 
-
-
-
-function request_source_png(source_links, status, callback) {
+/**
+ * 用 XMLHttpRequest 取得 blob
+ * @param  {object} work
+ * @param  {Function} callback(Blob)
+ */
+function request_source_png(work, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
+
+    // 請求完成
     xhr.onload = function(e) {
         if (this.status == 200) {
             var blob = new Blob([this.response], {
                 type: 'image/png'
             });
-            status.push("png");
+
             callback(blob);
         } else if (this.status == 404) {
             status.push("jpg");
@@ -231,31 +241,42 @@ function request_source_png(source_links, status, callback) {
             console.log(this.status);
         }
     }
-    for (var i = 0; i < source_links.length; i++) {
-        xhr.open("GET", source_links[i] + type);
+
+    // 送出請求
+    for (var i = 0; i < work.source_links.length; i++) {
+        xhr.open("GET", work.source_links[i] + "." + type);
         xhr.send();
     }
 }
 
-function request_source_jpg(source_links, status, callback) {
+/**
+ * 完成剩下的 jpg 請求取得 blob
+ * @param  {object} work
+ * @param  {Function} callback(Blob)
+ */
+function request_source_jpg(work, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
+
+    // 請求完成
     xhr.onload = function(e) {
         if (this.status == 200) {
             var blob = new Blob([this.response], {
                 type: 'image/jpeg'
             });
+
             callback(blob);
         } else {
             console.log(this.status);
         }
     }
-    for (var i = 0; i < source_links.length; i++) {
-        if (status[i] == "jpg") {
-            xhr.open("GET", source_links[i] + type);
+
+    // 送出請求
+    for (var i = 0; i < work.source_links.length; i++) {
+        if (work.type == "jpg") {
+            xhr.open("GET", work.source_links[i] + "." + type);
             xhr.send();
         }
-
     }
 }
 
@@ -272,8 +293,9 @@ function get_download_url(blob) {
 /**
  * 傳送下載連結給 background page 請他下載檔案
  * @param  {string} download_url
+ * @param  {Function} callback
  */
-function send_download_message(download_url) {
+function send_download_message(download_url, callback) {
     chrome.runtime.sendMessage({
         download_url: download_url
     }, function(response) {
