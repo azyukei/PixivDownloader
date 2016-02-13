@@ -24,9 +24,8 @@ $("li.image-item").each(function() {
 // 按下擴充功能按鈕
 $(".ext_button").click(function(){
 	var works = get_works($(this));
-	console.log(works);
-	parse_works(works, function() {
-
+	parse_works(works, function(source_links) {
+		console.log(source_links);
 	});
 });
 

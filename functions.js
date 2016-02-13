@@ -94,31 +94,35 @@ function get_works(button) {
 
 
 /**
+ * 
+ * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
+ */
+
+/**
  * 解析 works 中的 url 取得其他要用的資料
  * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
- * @return {object} urlData {}
+ * @param  {Function} callback
+ * @return {[type]}
  */
 function parse_works(works, callback) {
 
-    var link_datas = [];
+    var source_links = [];
 
     for (i in works) {
 
-        var link_data = {
-            "ix": "",
-            "date": "",
-            "time": "",
-            "id": "",
-            "px": "0"
-        }
-
         if (works[i].multiple) {
             // 相簿
+            // 取得 ix, date, time, id
+            var ill_data = parse_img_src(works[i].img_src);
+            // 取得 manga link
             var manga_link = get_manga_link(works[i].link);
+            // 取得作品頁數
             var p_max = request_multiple_works(manga_link, function(p_max) {
                 for (var i = 0; i < p_max; i++) {
-
+                	var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
+                	source_links.push(source_link);
                 }
+                callback(source_links);
             });
 
         } else if (works[i].ugoku) {
@@ -126,11 +130,14 @@ function parse_works(works, callback) {
             // TODO - 未決定如何使用
         } else {
             // 一般
-            parse_work_url(works[i].link)
+            // 取得 ix, date, time, id
+            var ill_data = parse_img_src(works[i].img_src);
+            source_links.push("http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p0");
+            callback(source_links);
         }
     }
 
-    return link_datas;
+    
 }
 
 /** 
