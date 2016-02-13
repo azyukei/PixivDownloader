@@ -202,15 +202,13 @@ function is_ugoku_work(work) {
 function check_source_type(source_links, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-    xhr.open("GET", source_links[0] + "png");
+    xhr.open("GET", source_links[0] + ".png");
     xhr.send();
     xhr.onload = function() {
         if (this.status == 404) {
-        	callback("jpg");
-            request_source(source_links, "jpg", callback);
+            callback(".jpg");
         } else if (this.status == 200) {
-        	callback("png");
-            request_source(source_links, "png", callback);
+            callback(".png");
         } else {
             console.log(this.status);
         }
@@ -218,7 +216,7 @@ function check_source_type(source_links, callback) {
 }
 
 function request_source(source_links, type, callback) {
-    ar xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.open("GET", source_links[0] + "type");
     xhr.onload = function(e) {
@@ -229,7 +227,7 @@ function request_source(source_links, type, callback) {
                     type: 'image/png'
                 });
             } else {
-            	blob = new Blob([this.response], {
+                blob = new Blob([this.response], {
                     type: 'image/jpeg'
                 });
             }
