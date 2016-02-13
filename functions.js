@@ -19,6 +19,9 @@ function get_works(button) {
                 // 將資料塞進 works
                 a_work.each(function() {
                     works.push({
+                        "title": $(this).parent().find("h1.title").text(),
+                        "user_name": $(this).parent().find("a.user").attr("data-user_name"),
+                        "user_id": $(this).parent().find("a.user").attr("data-user_id"),
                         "link": $(this).attr("href"),
                         "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                         "multiple": is_multiple_work($(this)),
@@ -37,6 +40,9 @@ function get_works(button) {
         // 將資料塞進 works
         a_work.each(function() {
             works.push({
+                "title": $(this).parent().find("h1.title").text(),
+                "user_name": $(this).parent().find("a.user").attr("data-user_name"),
+                "user_id": $(this).parent().find("a.user").attr("data-user_id"),
                 "link": $(this).attr("href"),
                 "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                 "multiple": is_multiple_work($(this)),
@@ -52,6 +58,9 @@ function get_works(button) {
 
         // 建立 work
         var work = {
+            "title": $("ui-expander-target > h1.title").text(),
+            "user_name": $("div._unit.profile-unit > h1.user").text(),
+            "user_id": $('#favorite-preference > form > input[name="user_id"]').attr("value"),
             "link": window.location.href,
             "img_src": "",
             "multiple": false,
@@ -82,6 +91,9 @@ function get_works(button) {
 
         // 塞進 worksg
         works.push({
+            "title": a_work.parent().find("h1.title").text(),
+            "user_name": a_work.parent().find("a.user").attr("data-user_name"),
+            "user_id": a_work.parent().find("a.user").attr("data-user_id"),
             "link": a_work.attr("href"),
             "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
             "multiple": is_multiple_work(a_work),
@@ -198,46 +210,47 @@ function is_ugoku_work(work) {
     return (work.attr("class").indexOf("ugoku-illust") > 0);
 }
 
-function check_source_type(source_links, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = "blob";
-    xhr.open("GET", source_links[0] + ".png");
-    xhr.send();
-    xhr.onload = function() {
-        if (this.status == 404) {
-            callback(".jpg");
-        } else if (this.status == 200) {
-            callback(".png");
-        } else {
-            console.log(this.status);
-        }
-    };
-}
-
-function request_source(source_links, status, callback) {
+function request_source_png(source_links, status, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.onload = function(e) {
         if (this.status == 200) {
-            var blob
-            if (type == "png") {
-                blob = new Blob([this.response], {
-                    type: 'image/png'
-                });
-            } else {
-                blob = new Blob([this.response], {
-                    type: 'image/jpeg'
-                });
-            }
+            var blob = new Blob([this.response], {
+                type: 'image/png'
+            });
+            status.push("png");
+            callback(blob);
+        } else if (this.status == 404) {
+            status.push("jpg");
+        } else {
+            console.log(this.status);
+        }
+    }
+    for (var i = 0; i < source_links.length; i++) {
+        xhr.open("GET", source_links[i] + type);
+        xhr.send();
+    }
+}
+
+function request_source_jpg(source_links, status, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.onload = function(e) {
+        if (this.status == 200) {
+            var blob = new Blob([this.response], {
+                type: 'image/jpeg'
+            });
             callback(blob);
         } else {
             console.log(this.status);
         }
     }
     for (var i = 0; i < source_links.length; i++) {
-    	console.log("Download[" + i + "]: " + source_links[i]);
-    	xhr.open("GET", source_links[i] + type);
-    	xhr.send();
+        if (status[i] == "jpg") {
+            xhr.open("GET", source_links[i] + type);
+            xhr.send();
+        }
+
     }
 }
 
