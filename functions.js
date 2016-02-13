@@ -191,21 +191,26 @@ function get_manga_link(works) {
  * @return {string} pages
  */
 function get_work_pages(work, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", work.manga_link, true);
-    xhr.send();
+    if (work.multiple) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", work.manga_link, true);
+        xhr.send();
 
-    xhr.onload = function() {
-        // 200 成功
-        if (this.status == 200) {
-            var html = $.parseHTML(this.response);
-            work.pages = $(html).find("span.total").text();
-            
-            callback(work);
-        } else {
-            console.log(this.status);
+        xhr.onload = function() {
+            // 200 成功
+            if (this.status == 200) {
+                var html = $.parseHTML(this.response);
+                work.pages = $(html).find("span.total").text();
+
+                callback(work);
+            } else {
+                console.log(this.status);
+            }
         }
+    } else {
+    	callback(work);
     }
+
 }
 
 /**
@@ -244,7 +249,7 @@ function request_source_png(work, callback) {
 
     // 送出請求
     for (var i = 0; i < work.source_links.length; i++) {
-        xhr.open("GET", work.source_links[i] + "." + type);
+        xhr.open("GET", work.source_links[i] + "." + work.type);
         xhr.send();
     }
 }
@@ -274,7 +279,7 @@ function request_source_jpg(work, callback) {
     // 送出請求
     for (var i = 0; i < work.source_links.length; i++) {
         if (work.type == "jpg") {
-            xhr.open("GET", work.source_links[i] + "." + type);
+            xhr.open("GET", work.source_links[i] + "." + work.type);
             xhr.send();
         }
     }
