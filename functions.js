@@ -25,7 +25,7 @@ function get_works(button) {
                         "time": "",
                         "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                         "user_id": $(this).parent().find("a.user").attr("data-user_id"),
-                        "type": "png"
+                        "type": "png",
                         "pages": 1,
                         "multiple": is_multiple_work($(this)),
                         "ugoku": is_ugoku_work($(this)),
@@ -55,7 +55,7 @@ function get_works(button) {
                 "time": "",
                 "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                 "user_id": $(this).parent().find("a.user").attr("data-user_id"),
-                "type": "png"
+                "type": "png",
                 "pages": 1,
                 "multiple": is_multiple_work($(this)),
                 "ugoku": is_ugoku_work($(this)),
@@ -82,7 +82,7 @@ function get_works(button) {
             "time": "",
             "user_name": $("div._unit.profile-unit > h1.user").text(),
             "user_id": $('#favorite-preference > form > input[name="user_id"]').attr("value"),
-            "type": "png"
+            "type": "png",
             "pages": 1,
             "multiple": false,
             "ugoku": false,
@@ -124,7 +124,7 @@ function get_works(button) {
             "time": "",
             "user_name": a_work.parent().find("a.user").attr("data-user_name"),
             "user_id": a_work.parent().find("a.user").attr("data-user_id"),
-            "type": "png"
+            "type": "png",
             "pages": 1,
             "multiple": is_multiple_work(a_work),
             "ugoku": is_ugoku_work(a_work),
@@ -145,8 +145,8 @@ function get_works(button) {
  * @param  {object} work	jQuery selected a.work.
  * @return {Boolean} Is target an album or manga.
  */
-function is_multiple_work(work) {
-    return (work.attr("class").indexOf("multiple") > 0);
+function is_multiple_work(a_work) {
+    return (a_work.attr("class").indexOf("multiple") > 0);
 }
 
 /**
@@ -154,8 +154,22 @@ function is_multiple_work(work) {
  * @param  {object} work	jQuery selected a.work.
  * @return {Boolean} Is target a ugoku.
  */
-function is_ugoku_work(work) {
-    return (work.attr("class").indexOf("ugoku-illust") > 0);
+function is_ugoku_work(a_work) {
+    return (a_work.attr("class").indexOf("ugoku-illust") > 0);
+}
+
+/**
+ * 解析 url 拿到需要用的資料
+ * @param  {string} url
+ * @return {object} Illust data, for  download image.
+ */
+function parse_img_src(works) {
+    for (var i = 0; i < works.length; i++) {
+        works[i].site = works[i].img_src.substr(works[i].img_src.indexOf("//i") + 3, 1);
+        works[i].date = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 4, 10);
+        works[i].time = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 15, 8);
+        works[i].id = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 24, 8);
+    }
 }
 
 /** 
@@ -163,9 +177,13 @@ function is_ugoku_work(work) {
  * @param  {string} link
  * @return {string} manga_link
  */
-function get_manga_link(link) {
-    var manga_link = link.replace("medium", "manga");
-    return manga_link;
+function get_manga_link(works) {
+    for (var i = 0; i < works.length; i++) {
+        if (works[i].multiple) {
+            var link = works[i].link;
+            works[i].manga_link = link.replace("medium", "manga");
+        }
+    }
 }
 
 /**
@@ -193,18 +211,7 @@ function get_work_pages(works, callback) {
 
 }
 
-/**
- * 解析 url 拿到需要用的資料
- * @param  {string} url
- * @return {object} Illust data, for  download image.
- */
-function parse_img_src(works) {
-    works.site = works.img_src.substr(link.indexOf("//i") + 3, 1);
-    works.date = works.img_src.substr(link.indexOf("img/") + 4, 10);
-    works.time = works.img_src.substr(link.indexOf("img/") + 15, 8);
-    works.id = works.img_src.substr(link.indexOf("img/") + 24, 8);
-    return works;
-}
+
 
 
 
