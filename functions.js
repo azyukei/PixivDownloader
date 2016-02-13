@@ -119,7 +119,7 @@ function get_works(button) {
  * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
  * @return {object} urlData {}
  */
-function parse_works(works) {
+function parse_works(works, callback) {
 
     var link_datas = [];
 
@@ -135,13 +135,12 @@ function parse_works(works) {
 
         if (works[i].multiple) {
             // 相簿
-			var manga_link = get_manga_link(works[i].link);
-            var p_max = request_multiple_works(manga_link);
-            if (p_max > 0) {
-            	for (var i = 0; i < p_max; i++) {
-            		
-            	}
-            }
+            var manga_link = get_manga_link(works[i].link);
+            var p_max = request_multiple_works(manga_link, function(p_max) {
+                for (var i = 0; i < p_max; i++) {
+
+                }
+            });
 
         } else if (works[i].ugoku) {
             // 動圖
@@ -161,8 +160,8 @@ function parse_works(works) {
  * @return {string} manga_link
  */
 function get_manga_link(link) {
-	var manga_link = link.replace("medium", "manga");
-	return manga_link;
+    var manga_link = link.replace("medium", "manga");
+    return manga_link;
 }
 
 /**
@@ -170,21 +169,20 @@ function get_manga_link(link) {
  * @param  {string} manga_link
  * @return {string} p_max
  */
-function request_multiple_works(manga_link) {
+function request_multiple_works(manga_link, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", manga_link, true);
     xhr.onload = function() {
         // 200 成功
         if (this.status == 200) {
-        	var html = parseHTML(this.response);
-        	return html.find("span.total").val();
+            var html = $.parseHTML(this.response);
+            var p_max = $(html).find("span.total").text();
+            callback(p_max);
         } else {
-        	console.log(this.status);
+            console.log(this.status);
         }
-    };
+    }
     xhr.send();
-
-    return -1;
 }
 
 /**

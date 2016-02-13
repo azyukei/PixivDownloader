@@ -25,7 +25,9 @@ $("li.image-item").each(function() {
 $(".ext_button").click(function(){
 	var works = get_works($(this));
 	console.log(works);
-	var link_datas = parse_works(works);
+	parse_works(works, function() {
+
+	});
 });
 
 
