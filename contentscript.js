@@ -24,12 +24,6 @@ $("li.image-item").each(function() {
 // 按下擴充功能按鈕
 $(".ext_button").click(function(){
 	var works = get_works($(this));
-	parse_works(works, function(works) {
-		check_source_type(works, function(type) {
-			request_source(source_links, status, function(blob) {
-				var download_url = get_download_url(blob);
-				send_download_message(download_url);
-			});
-		});
-	});
+	works = parse_img_src(works);
+
 });

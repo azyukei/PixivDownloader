@@ -20,13 +20,18 @@ function get_works(button) {
                 a_work.each(function() {
                     works.push({
                         "title": $(this).parent().find("h1.title").text(),
+                        "id": "",
+                        "date": "",
+                        "time": "",
                         "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                         "user_id": $(this).parent().find("a.user").attr("data-user_id"),
                         "type": "png"
                         "pages": 1,
                         "multiple": is_multiple_work($(this)),
                         "ugoku": is_ugoku_work($(this)),
+                        "site": "",
                         "link": $(this).attr("href"),
+                        "manga_link": "",
                         "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                         "source_links": [],
                         "blob_links": []
@@ -45,13 +50,18 @@ function get_works(button) {
         a_work.each(function() {
             works.push({
                 "title": $(this).parent().find("h1.title").text(),
+                "id": "",
+                "date": "",
+                "time": "",
                 "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                 "user_id": $(this).parent().find("a.user").attr("data-user_id"),
                 "type": "png"
                 "pages": 1,
                 "multiple": is_multiple_work($(this)),
                 "ugoku": is_ugoku_work($(this)),
+                "site": "",
                 "link": $(this).attr("href"),
+                "manga_link": "",
                 "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                 "source_links": [],
                 "blob_links": []
@@ -67,13 +77,18 @@ function get_works(button) {
         // 建立 work
         var work = {
             "title": $("ui-expander-target > h1.title").text(),
+            "id": "",
+            "date": "",
+            "time": "",
             "user_name": $("div._unit.profile-unit > h1.user").text(),
             "user_id": $('#favorite-preference > form > input[name="user_id"]').attr("value"),
             "type": "png"
             "pages": 1,
             "multiple": false,
             "ugoku": false,
+            "site": "",
             "link": window.location.href,
+            "manga_link": "",
             "img_src": "",
             "source_links": [],
             "blob_links": []
@@ -104,13 +119,18 @@ function get_works(button) {
         // 塞進 worksg
         works.push({
             "title": a_work.parent().find("h1.title").text(),
+            "id": "",
+            "date": "",
+            "time": "",
             "user_name": a_work.parent().find("a.user").attr("data-user_name"),
             "user_id": a_work.parent().find("a.user").attr("data-user_id"),
             "type": "png"
             "pages": 1,
             "multiple": is_multiple_work(a_work),
             "ugoku": is_ugoku_work(a_work),
+            "site": "",
             "link": a_work.attr("href"),
+            "manga_link": "",
             "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
             "source_links": [],
             "blob_links": []
@@ -118,91 +138,6 @@ function get_works(button) {
     }
 
     return works;
-}
-
-/**
- * 解析 works 中的 url 取得其他要用的資料
- * @param  {object} works {"link": a.work.href, "multiple": boolean, "ugoku":boolean}
- * @param  {Function} callback
- * @return {[type]}
- */
-function parse_works(works, callback) {
-
-    for (i in works) {
-
-        if (works[i].multiple) {
-            // 相簿
-            // 取得 ix, date, time, id
-            var ill_data = parse_img_src(works[i].img_src);
-            // 取得 manga link
-            var manga_link = get_manga_link(works[i].link);
-            // 取得作品頁數
-            var p_max = get_work_pages(manga_link, function(p_max) {
-                for (var i = 0; i < p_max; i++) {
-                    var works[i].source_links = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
-                }
-            });
-
-        } else if (works[i].ugoku) {
-            // 動圖
-            // TODO - 未決定如何使用
-        } else {
-            // 一般
-            // 取得 ix, date, time, id
-            var ill_data = parse_img_src(works[i].img_src);
-            works[i].source_links = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p0";
-        }
-    }
-    callback(works);
-}
-
-/** 
- * 將相簿作品連結變成漫畫連結
- * @param  {string} link
- * @return {string} manga_link
- */
-function get_manga_link(link) {
-    var manga_link = link.replace("medium", "manga");
-    return manga_link;
-}
-
-/**
- * 分析漫畫連結來取得作品頁數
- * @param  {string} manga_link
- * @return {string} p_max
- */
-function get_work_pages(manga_link, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", manga_link, true);
-    xhr.onload = function() {
-        // 200 成功
-        if (this.status == 200) {
-            var html = $.parseHTML(this.response);
-            var p_max = $(html).find("span.total").text();
-            callback(p_max);
-        } else {
-            console.log(this.status);
-        }
-    }
-    xhr.send();
-}
-
-/**
- * 解析 url 拿到需要用的資料
- * @param  {string} url
- * @return {object} Illust data, for  download image.
- */
-function parse_img_src(link) {
-    var ix = link.substr(link.indexOf("//i") + 3, 1);
-    var date = link.substr(link.indexOf("img/") + 4, 10);
-    var time = link.substr(link.indexOf("img/") + 15, 8);
-    var id = link.substr(link.indexOf("img/") + 24, 8);
-    return {
-        ix: ix,
-        date: date,
-        time: time,
-        id: id
-    };
 }
 
 /**
@@ -222,6 +157,56 @@ function is_multiple_work(work) {
 function is_ugoku_work(work) {
     return (work.attr("class").indexOf("ugoku-illust") > 0);
 }
+
+/** 
+ * 將相簿作品連結變成漫畫連結
+ * @param  {string} link
+ * @return {string} manga_link
+ */
+function get_manga_link(link) {
+    var manga_link = link.replace("medium", "manga");
+    return manga_link;
+}
+
+/**
+ * 分析漫畫連結來取得作品頁數
+ * @param  {string} manga_link
+ * @return {string} p_max
+ */
+function get_work_pages(works, callback) {
+    var xhr = new XMLHttpRequest();
+    for (var i = 0; i < works.length; i++) {
+        xhr.open("GET", get_manga_link(works[i].link), true);
+        xhr.send();
+    }
+
+    xhr.onload = function() {
+        // 200 成功
+        if (this.status == 200) {
+            var html = $.parseHTML(this.response);
+            var p_max = $(html).find("span.total").text();
+            callback();
+        } else {
+            console.log(this.status);
+        }
+    }
+
+}
+
+/**
+ * 解析 url 拿到需要用的資料
+ * @param  {string} url
+ * @return {object} Illust data, for  download image.
+ */
+function parse_img_src(works) {
+    works.site = works.img_src.substr(link.indexOf("//i") + 3, 1);
+    works.date = works.img_src.substr(link.indexOf("img/") + 4, 10);
+    works.time = works.img_src.substr(link.indexOf("img/") + 15, 8);
+    works.id = works.img_src.substr(link.indexOf("img/") + 24, 8);
+    return works;
+}
+
+
 
 function request_source_png(source_links, status, callback) {
     var xhr = new XMLHttpRequest();
