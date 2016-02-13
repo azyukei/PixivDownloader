@@ -22,10 +22,14 @@ function get_works(button) {
                         "title": $(this).parent().find("h1.title").text(),
                         "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                         "user_id": $(this).parent().find("a.user").attr("data-user_id"),
+                        "type": "png"
+                        "pages": 1,
+                        "multiple": is_multiple_work($(this)),
+                        "ugoku": is_ugoku_work($(this)),
                         "link": $(this).attr("href"),
                         "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
-                        "multiple": is_multiple_work($(this)),
-                        "ugoku": is_ugoku_work($(this))
+                        "source_links": [],
+                        "blob_links": []
                     });
                 });
             }
@@ -43,10 +47,14 @@ function get_works(button) {
                 "title": $(this).parent().find("h1.title").text(),
                 "user_name": $(this).parent().find("a.user").attr("data-user_name"),
                 "user_id": $(this).parent().find("a.user").attr("data-user_id"),
+                "type": "png"
+                "pages": 1,
+                "multiple": is_multiple_work($(this)),
+                "ugoku": is_ugoku_work($(this)),
                 "link": $(this).attr("href"),
                 "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
-                "multiple": is_multiple_work($(this)),
-                "ugoku": is_ugoku_work($(this))
+                "source_links": [],
+                "blob_links": []
             });
         });
     }
@@ -61,10 +69,14 @@ function get_works(button) {
             "title": $("ui-expander-target > h1.title").text(),
             "user_name": $("div._unit.profile-unit > h1.user").text(),
             "user_id": $('#favorite-preference > form > input[name="user_id"]').attr("value"),
+            "type": "png"
+            "pages": 1,
+            "multiple": false,
+            "ugoku": false,
             "link": window.location.href,
             "img_src": "",
-            "multiple": false,
-            "ugoku": false
+            "source_links": [],
+            "blob_links": []
         }
 
         // 判斷類型寫入資料
@@ -94,10 +106,14 @@ function get_works(button) {
             "title": a_work.parent().find("h1.title").text(),
             "user_name": a_work.parent().find("a.user").attr("data-user_name"),
             "user_id": a_work.parent().find("a.user").attr("data-user_id"),
+            "type": "png"
+            "pages": 1,
+            "multiple": is_multiple_work(a_work),
+            "ugoku": is_ugoku_work(a_work),
             "link": a_work.attr("href"),
             "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
-            "multiple": is_multiple_work(a_work),
-            "ugoku": is_ugoku_work(a_work)
+            "source_links": [],
+            "blob_links": []
         });
     }
 
@@ -112,8 +128,6 @@ function get_works(button) {
  */
 function parse_works(works, callback) {
 
-    var source_links = [];
-
     for (i in works) {
 
         if (works[i].multiple) {
@@ -125,8 +139,7 @@ function parse_works(works, callback) {
             // 取得作品頁數
             var p_max = get_work_pages(manga_link, function(p_max) {
                 for (var i = 0; i < p_max; i++) {
-                    var source_link = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
-                    source_links.push(source_link);
+                    var works[i].source_links = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p" + i;
                 }
             });
 
@@ -137,10 +150,10 @@ function parse_works(works, callback) {
             // 一般
             // 取得 ix, date, time, id
             var ill_data = parse_img_src(works[i].img_src);
-            source_links.push("http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p0");
+            works[i].source_links = "http://i" + ill_data.ix + ".pixiv.net/img-original/img/" + ill_data.date + "/" + ill_data.time + "/" + ill_data.id + "_p0";
         }
     }
-    callback(source_links);
+    callback(works);
 }
 
 /** 
