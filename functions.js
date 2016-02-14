@@ -172,6 +172,7 @@ function parse_img_src(works) {
         works[i].date = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 4, 10);
         works[i].time = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 15, 8);
         works[i].id = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 24, 8);
+        works[i].id = works[i].id.replace("_", "");
     }
 }
 
@@ -232,9 +233,11 @@ function get_source_link(work) {
  * @param  {object} work
  */
 function get_filename(work) {
+	console.log(work.id);
     var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
-    filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
-    filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元
+    filename = filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
+    filename = filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元
+    console.log(filename);
     if (work.multiple) {
         for (var i = 0; i < work.source_links.length; i++) {
 
