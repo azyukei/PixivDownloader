@@ -29,22 +29,23 @@ $(".ext_button").click(function() {
 
     // 非同步函式
     for (var i = 0; i < works.length; i++) {
+        if (!work.ugoku) {
+            get_work_pages(works[i], function(work) {
 
-        get_work_pages(works[i], function(work) {
+                get_source_link(work);
+                get_filename(work);
 
-            get_source_link(work);
-            get_filename(work);
-
-            check_type(work, function(work, type) {
-                for (var i = 0; i < work.source_links.length; i++) {
-                    request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
-                        var download_url = get_download_url(blob);
-                        send_download_message(download_url, filename, function() {
-                        	// TODO - 下載後做些什麼？
+                check_type(work, function(work, type) {
+                    for (var i = 0; i < work.source_links.length; i++) {
+                        request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
+                            var download_url = get_download_url(blob);
+                            send_download_message(download_url, filename, function() {
+                                // TODO - 下載後做些什麼？
+                            });
                         });
-                    });
-                }
+                    }
+                });
             });
-        });
+        }
     }
 });
