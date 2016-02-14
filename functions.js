@@ -290,68 +290,6 @@ function request_source(source_link, filename, type, callback) {
 	xhr.send(null);
 }
 
-
-/**
- * 用 XMLHttpRequest 取得 blob
- * @param  {object} work
- * @param  {Function} request_jpg_callback(object work)
- * @param  {Function} callback(Blob)
- */
-function request_source_png(work, request_jpg_callback, callback) {
-    // 送出請求
-    for (var i = 0; i < work.source_links.length; i++) {
-        var xhr = new XMLHttpRequest();
-        var filename = work.filename[i];
-        xhr.responseType = "blob";
-        xhr.open("GET", work.source_links[i] + "." + work.type);
-        xhr.onload = function(e) {
-            if (xhr.status == 200) {
-                var blob = new Blob([xhr.response], {
-                    type: 'image/png'
-                });
-
-                console.log(filename);
-                callback(blob, filename + "." + work.type);
-            } else if (xhr.status == 404) {
-                work.type = "jpg";
-                request_jpg_callback(work, callback);
-            } else {
-                console.log(xhr.status);
-            }
-        }
-        xhr.send(null);
-    }
-}
-
-/**
- * 完成剩下的 jpg 請求取得 blob
- * @param  {object} work
- * @param  {Function} callback(Blob)
- */
-function request_source_jpg(work, callback) {
-
-    // 送出請求
-    for (var i = 0; i < work.source_links.length; i++) {
-        if (work.type == "jpg") {
-            var xhr = new XMLHttpRequest();
-            var filename = work.filename[i];
-            xhr.responseType = "blob";
-            xhr.open("GET", work.source_links[i] + "." + work.type);
-            xhr.onload = function(e) {
-                if (xhr.status == 200) {
-                    var blob = new Blob([xhr.response], {
-                        type: 'image/jpeg'
-                    });
-                    callback(blob, filename + "." + work.type);
-                } else {
-                    console.log(xhr.status);
-                }
-            }
-            xhr.send(null);
-        }
-    }
-}
-
 /**
  * 用 Blob 建立下載連結
  * @param  {Blob} blob
