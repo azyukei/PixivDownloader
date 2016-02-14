@@ -232,7 +232,9 @@ function get_source_link(work) {
  * @param  {object} work
  */
 function get_filename(work) {
-    var filename = work.user_name + " - " + work.title + "(" + work.id + ")";
+    var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
+    filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
+    filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元
     if (work.multiple) {
         for (var i = 0; i < work.source_links.length; i++) {
 
