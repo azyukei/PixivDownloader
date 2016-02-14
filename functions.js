@@ -34,6 +34,7 @@ function get_works(button) {
                         "manga_link": "",
                         "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                         "source_links": [],
+                        "filename": [],
                         "blob_links": []
                     });
                 });
@@ -64,6 +65,7 @@ function get_works(button) {
                 "manga_link": "",
                 "img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
                 "source_links": [],
+                "filename": [],
                 "blob_links": []
             });
         });
@@ -91,6 +93,7 @@ function get_works(button) {
             "manga_link": "",
             "img_src": "",
             "source_links": [],
+            "filename": [],
             "blob_links": []
         }
 
@@ -133,6 +136,7 @@ function get_works(button) {
             "manga_link": "",
             "img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
             "source_links": [],
+            "filename": [],
             "blob_links": []
         });
     }
@@ -224,6 +228,17 @@ function get_source_link(work) {
 }
 
 /**
+ * 根據設定建立檔案名稱
+ * @param  {object} work
+ */
+function get_filename(work) {
+    for (var i = 0; i < work.source_links.length; i++) {
+        work.filename[i] = work.user_name + " - " + work.title + "(" + work.id + ") p" + i;
+        console.log(work.filename[i]);
+    }
+}
+
+/**
  * 用 XMLHttpRequest 取得 blob
  * @param  {object} work
  * @param  {Function} request_jpg_callback(object work)
@@ -235,7 +250,7 @@ function request_source_png(work, request_jpg_callback, callback) {
         var xhr = new XMLHttpRequest();
         xhr.responseType = "blob";
         xhr.open("GET", work.source_links[i] + "." + work.type);
-        
+        var filename = work.filename[i];
         // 請求完成
         xhr.onload = function(e) {
             if (this.status == 200) {
@@ -243,7 +258,7 @@ function request_source_png(work, request_jpg_callback, callback) {
                     type: 'image/png'
                 });
 
-                callback(blob);
+                callback(blob, filename + "." + work.type);
             } else if (this.status == 404) {
                 work.type = "jpg";
                 request_jpg_callback(work, callback);
@@ -263,24 +278,23 @@ function request_source_png(work, request_jpg_callback, callback) {
 function request_source_jpg(work, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-
-    // 請求完成
-    xhr.onload = function(e) {
-        if (this.status == 200) {
-            var blob = new Blob([this.response], {
-                type: 'image/jpeg'
-            });
-
-            callback(blob);
-        } else {
-            console.log(this.status);
-        }
-    }
-
     // 送出請求
     for (var i = 0; i < work.source_links.length; i++) {
         if (work.type == "jpg") {
             xhr.open("GET", work.source_links[i] + "." + work.type);
+            var filename = work.filename[i];
+            // 請求完成
+            xhr.onload = function(e) {
+                if (this.status == 200) {
+                    var blob = new Blob([this.response], {
+                        type: 'image/jpeg'
+                    });
+                    console.log(filename);
+                    callback(blob, filename + "." + work.type);
+                } else {
+                    console.log(this.status);
+                }
+            }
             xhr.send();
         }
     }
@@ -301,9 +315,11 @@ function get_download_url(blob) {
  * @param  {string} download_url
  * @param  {Function} callback
  */
-function send_download_message(download_url, callback) {
+function send_download_message(download_url, filename, callback) {
+    console.log(filename);
     chrome.runtime.sendMessage({
-        download_url: download_url
+        download_url: download_url,
+        filename: filename
     }, function(response) {
         //console.log(response.farewell);
     });
