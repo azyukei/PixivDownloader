@@ -243,6 +243,11 @@ function get_filename(work) {
     }
 }
 
+/**
+ * 確認檔案類型，在 HEADERS_RECEIVED 狀態就終止，不要下載
+ * @param  {object} work
+ * @param  {Function} callback function(work, type)
+ */
 function check_type(work, callback) {
 	var type;
     var xhr = new XMLHttpRequest();
@@ -264,6 +269,12 @@ function check_type(work, callback) {
     xhr.send(null);
 }
 
+/**
+ * @param  {string} source_link 含副檔名
+ * @param  {string} filename
+ * @param  {string} type blob type
+ * @param  {Function}
+ */
 function request_source(source_link, filename, type, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = "blob";
