@@ -35,21 +35,36 @@ $(".ext_button").click(function() {
             get_source_link(work);
             get_filename(work);
 
-            // 先請求 png，不行的話先用第一個 callback 改請求 jpg
-            request_source_png(work, function(work) {
-                // 非 png 改成請求 jpg
-                request_source_jpg(work, function(blob, filename) {
-                    // jpg blob
-                    var download_url = get_download_url(blob);
-                    send_download_message(download_url, filename);
-
-                });
-            }, function(blob, filename) {
-            	// png blob
-                var download_url = get_download_url(blob);
-                send_download_message(download_url, filename);
-
+            check_type(work, function(work, type) {
+                for (var i = 0; i < work.source_links.length; i++) {
+                    request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
+                    	console.log(filename);
+                        var download_url = get_download_url(blob);
+                        send_download_message(download_url, filename, function() {
+                        	// TODO - 下載後做些什麼？
+                        });
+                    });
+                }
             });
+
+
+
+
+            // 先請求 png，不行的話先用第一個 callback 改請求 jpg
+            // request_source_png(work, function(work) {
+            //     // 非 png 改成請求 jpg
+            //     request_source_jpg(work, function(blob, filename) {
+            //         // jpg blob
+            //         var download_url = get_download_url(blob);
+            //         send_download_message(download_url, filename);
+
+            //     });
+            // }, function(blob, filename) {
+            // 	// png blob
+            //     var download_url = get_download_url(blob);
+            //     send_download_message(download_url, filename);
+
+            // });
         });
     }
 });

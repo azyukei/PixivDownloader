@@ -239,9 +239,46 @@ function get_filename(work) {
             work.filename[i] = filename + "_p" + i;
         }
     } else {
-    	work.filename[0] = filename;
+        work.filename[0] = filename;
     }
 }
+
+function check_type(work, callback) {
+	var type;
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.open("GET", work.source_links[0] + ".png");
+    xhr.onreadystatechange = function(e) {
+        if (xhr.readyState == 2) {
+            if (xhr.status == 404) {
+                work.type = "jpg";
+                type = "image/jpeg";
+            } else if (xhr.status == 200) {
+            	work.type = "png";
+                type = "image/png";
+            }
+            xhr.abort();
+            callback(work, type);
+        }
+    };
+    xhr.send(null);
+}
+
+function request_source(source_link, filename, type, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = "blob";
+	xhr.open("GET", source_link);
+	xhr.onreadystatechange = function(e) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var blob = new Blob([xhr.response], {
+				type: type
+			});
+			callback(blob, filename);
+		}
+	}
+	xhr.send(null);
+}
+
 
 /**
  * 用 XMLHttpRequest 取得 blob
@@ -253,25 +290,25 @@ function request_source_png(work, request_jpg_callback, callback) {
     // 送出請求
     for (var i = 0; i < work.source_links.length; i++) {
         var xhr = new XMLHttpRequest();
+        var filename = work.filename[i];
         xhr.responseType = "blob";
         xhr.open("GET", work.source_links[i] + "." + work.type);
-        var filename = work.filename[i];
-        // 請求完成
         xhr.onload = function(e) {
-            if (this.status == 200) {
-                var blob = new Blob([this.response], {
+            if (xhr.status == 200) {
+                var blob = new Blob([xhr.response], {
                     type: 'image/png'
                 });
 
+                console.log(filename);
                 callback(blob, filename + "." + work.type);
-            } else if (this.status == 404) {
+            } else if (xhr.status == 404) {
                 work.type = "jpg";
                 request_jpg_callback(work, callback);
             } else {
-                console.log(this.status);
+                console.log(xhr.status);
             }
         }
-        xhr.send();
+        xhr.send(null);
     }
 }
 
@@ -281,26 +318,25 @@ function request_source_png(work, request_jpg_callback, callback) {
  * @param  {Function} callback(Blob)
  */
 function request_source_jpg(work, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = "blob";
+
     // 送出請求
     for (var i = 0; i < work.source_links.length; i++) {
         if (work.type == "jpg") {
-            xhr.open("GET", work.source_links[i] + "." + work.type);
+            var xhr = new XMLHttpRequest();
             var filename = work.filename[i];
-            // 請求完成
+            xhr.responseType = "blob";
+            xhr.open("GET", work.source_links[i] + "." + work.type);
             xhr.onload = function(e) {
-                if (this.status == 200) {
-                    var blob = new Blob([this.response], {
+                if (xhr.status == 200) {
+                    var blob = new Blob([xhr.response], {
                         type: 'image/jpeg'
                     });
-                    console.log(filename);
                     callback(blob, filename + "." + work.type);
                 } else {
-                    console.log(this.status);
+                    console.log(xhr.status);
                 }
             }
-            xhr.send();
+            xhr.send(null);
         }
     }
 }
