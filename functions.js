@@ -78,12 +78,12 @@ function get_works(button) {
 
         // 建立 work
         var work = {
-            "title": $("ui-expander-target > h1.title").text(),
+            "title": $("div.ui-expander-target > h1.title").text(),
             "id": "",
             "date": "",
             "time": "",
-            "user_name": $("div._unit.profile-unit > h1.user").text(),
-            "user_id": $('#favorite-preference > form > input[name="user_id"]').attr("value"),
+            "user_name": $("h1.user").text(),
+            "user_id": $('input[name="user_id"]').attr("value"),
             "type": "png",
             "pages": 1,
             "multiple": false,
@@ -96,6 +96,7 @@ function get_works(button) {
             "filename": [],
             "blob_links": []
         }
+        console.log(work);
 
         // 判斷類型寫入資料
         if (works_display.find("._work").length == 1) {
