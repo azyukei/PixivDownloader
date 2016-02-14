@@ -232,9 +232,14 @@ function get_source_link(work) {
  * @param  {object} work
  */
 function get_filename(work) {
-    for (var i = 0; i < work.source_links.length; i++) {
-        work.filename[i] = work.user_name + " - " + work.title + "(" + work.id + ") p" + i;
-        console.log(work.filename[i]);
+    var filename = work.user_name + " - " + work.title + "(" + work.id + ")";
+    if (work.multiple) {
+        for (var i = 0; i < work.source_links.length; i++) {
+
+            work.filename[i] = filename + "_p" + i;
+        }
+    } else {
+    	work.filename[0] = filename;
     }
 }
 
@@ -316,7 +321,6 @@ function get_download_url(blob) {
  * @param  {Function} callback
  */
 function send_download_message(download_url, filename, callback) {
-    console.log(filename);
     chrome.runtime.sendMessage({
         download_url: download_url,
         filename: filename
