@@ -29,7 +29,7 @@ $(".ext_button").click(function() {
 
     // 非同步函式
     for (var i = 0; i < works.length; i++) {
-        if (!work.ugoku) {
+        if (!works[i].ugoku) {
             get_work_pages(works[i], function(work) {
 
                 get_source_link(work);
