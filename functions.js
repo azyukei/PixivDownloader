@@ -96,7 +96,6 @@ function get_works(button) {
             "filename": [],
             "blob_links": []
         }
-        console.log(work);
 
         // 判斷類型寫入資料
         if (works_display.find("._work").length == 1) {
@@ -234,11 +233,9 @@ function get_source_link(work) {
  * @param  {object} work
  */
 function get_filename(work) {
-	console.log(work.id);
     var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
     filename = filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
     filename = filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元
-    console.log(filename);
     if (work.multiple) {
         for (var i = 0; i < work.source_links.length; i++) {
 
