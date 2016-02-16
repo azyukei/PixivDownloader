@@ -264,6 +264,7 @@ function check_type(work, callback) {
             } else if (xhr.status == 200) {
             	work.type = "png";
                 type = "image/png";
+                console.log(xhr.getAllResponseHeaders());
             }
             xhr.abort();
             callback(work, type);

@@ -22,21 +22,34 @@ $("li.image-item").each(function() {
 });
 
 // 插入瀏覽用的暗背景
-$("body").prepend('<div class="view_layer"></div>')
-$("body").prepend('<div class="shadow_layer"><span class="close_layer" >✖</span></div>');
+$("body").prepend('<div class="view_layer"><span class="close_layer" >✖</span><br><img class="view_img"></div>')
+$("body").prepend('<div class="shadow_layer"></div>');
 
-// 按下瀏覽按鈕
+// 按下預覽按鈕
 $(".ext_view").click(function() {
     $("div.view_layer").show();
     $("div.shadow_layer").show();
+    $("img.view_img").attr("src", "");
+    var big_src = "";
+    if ($("div.view_layer").width < 750 || $("div.view_layer").height < 750) {
+        big_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "600x600");
+    } else {
+        big_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "1200x1200");
+    }
+    $("img.view_img").attr("src", big_src);
+
+
 });
 
-// 關閉瀏覽
+// 關閉預覽
 $("span.close_layer").click(function() {
-	hide_layer();
+    hide_layer();
+});
+$("div.view_layer").click(function() {
+    hide_layer();
 });
 $("div.shadow_layer").click(function() {
-	hide_layer();
+    hide_layer();
 });
 
 // 按下擴充功能按鈕
