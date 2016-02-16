@@ -235,7 +235,7 @@ function get_source_link(work) {
 function get_filename(work) {
     var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
     filename = filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
-    filename = filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元
+    filename = filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元g
     if (work.multiple) {
         for (var i = 0; i < work.source_links.length; i++) {
 
@@ -315,4 +315,9 @@ function send_download_message(download_url, filename, callback) {
     }, function(response) {
         //console.log(response.farewell);
     });
+}
+
+function hide_layer() {
+	$("div.view_layer").hide();
+    $("div.shadow_layer").hide();
 }

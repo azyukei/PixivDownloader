@@ -3,26 +3,44 @@ var url = window.location.href;
 
 // 加入收藏按鈕
 if (url.search("bookmark.php") > 0) {
-    $("nav.column-order-menu").append('<span class="_button ext_button bookmark_download_all">整頁下載</a>');
+    $("nav.column-order-menu").append('<span class="_button ext_download bookmark_download_all">整頁下載</a>');
 }
 
 // 加入作品列表按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
-    $("ul.column-order-menu").append('<span class="_button ext_button member_illust_download_all">整頁下載</a>');
+    $("ul.column-order-menu").append('<span class="_button ext_download member_illust_download_all">整頁下載</a>');
 }
 
 // 加入插圖按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-    $("div.bookmark-container").append('<span class="_button ext_button illust_download">下載</a>');
+    $("div.bookmark-container").append('<span class="_button ext_download illust_download">下載</a>');
 }
 
 // 加入預覽圖按鈕
 $("li.image-item").each(function() {
-    $(this).prepend('<div class="extension-button"><input class="_button ext_button thumbnail_view" type="button" value="🔍" /><br><input class="_button ext_button thumbnail_download" type="button" value="⬇︎" /></div>');
+    $(this).prepend('<div class="extension-button"><input class="_button ext_view thumbnail_view" type="button" value="🔍" /><br><input class="_button ext_download thumbnail_download" type="button" value="⬇︎" /></div>');
+});
+
+// 插入瀏覽用的暗背景
+$("body").prepend('<div class="view_layer"></div>')
+$("body").prepend('<div class="shadow_layer"><span class="close_layer" >✖</span></div>');
+
+// 按下瀏覽按鈕
+$(".ext_view").click(function() {
+    $("div.view_layer").show();
+    $("div.shadow_layer").show();
+});
+
+// 關閉瀏覽
+$("span.close_layer").click(function() {
+	hide_layer();
+});
+$("div.shadow_layer").click(function() {
+	hide_layer();
 });
 
 // 按下擴充功能按鈕
-$(".ext_button").click(function() {
+$(".ext_download").click(function() {
     var works = get_works($(this));
     parse_img_src(works);
     get_manga_link(works);

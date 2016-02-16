@@ -34,3 +34,27 @@ div.bookmark-container span.ext_button {
 a.edit-bookmark.button-on + span.ext_button {
     margin-top: -2px;
 }
+
+div.shadow_layer {
+    display: none;
+    z-index: 10000;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;  
+    background: #000;
+    opacity: 0.8;
+}
+
+div.view_layer {
+    z-index: 10001;
+}
+
+span.close_layer {
+    z-index: 10001;
+    position: fixed;
+    top: 7px;
+    right: 7px;
+    
+}
