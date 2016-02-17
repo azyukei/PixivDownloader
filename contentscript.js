@@ -27,16 +27,47 @@ $("body").prepend('<div class="shadow_layer"></div>');
 
 // 按下預覽按鈕
 $(".ext_view").click(function() {
+    $("img").remove(".view_img");
     $("div.view_layer").show();
     $("div.shadow_layer").show();
-    $("img.view_img").attr("src", "");
-    var big_src = "";
-    if ($("div.view_layer").width < 750 || $("div.view_layer").height < 750) {
-        big_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "600x600");
+
+    var div_w = $("div.view_layer").width();
+    var div_h = $("div.view_layer").height();
+
+    var img_src = "";
+    if (div_h > 800) {
+        img_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "1200x1200");
     } else {
-        big_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "1200x1200");
+        img_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "600x600");
     }
-    $("img.view_img").attr("src", big_src);
+
+    var img = new Image();
+    img.onload = function() {
+
+        console.log("img: " + img.naturalWidth + ", " + img.naturalHeight);
+        console.log("div: " + div_w + ", " + div_h);
+
+        if (img.naturalHeight > div_h) {
+            img.height = div_h;
+
+            if (img.Width > div_w) {
+                img.Width = div_w;
+            }
+        }
+
+        if (img.naturalWidth > div_w) {
+            img.Width = div_w;
+
+            if (img.height > div_h) {
+                img.height = div_h;
+            }
+        }
+    };
+    img.src = img_src;
+    img.className = "view_img";
+
+    $("div.view_layer").append(img);
+
 
 
 });
