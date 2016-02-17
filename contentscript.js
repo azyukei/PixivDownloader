@@ -22,11 +22,12 @@ $("li.image-item").each(function() {
 });
 
 // 插入瀏覽用的暗背景
-$("body").prepend('<div class="view_layer"><span class="close_layer" >✖</span><br><img class="view_img"></div>')
-$("body").prepend('<div class="shadow_layer"></div>');
+$("body").prepend('<div class="view_layer"></div></div>')
+$("body").prepend('<div class="shadow_layer"><span class="close_layer" >✖</span></div>');
 
 // 按下預覽按鈕
 $(".ext_view").click(function() {
+	// 移除舊的 img
     $("img").remove(".view_img");
     $("div.view_layer").show();
     $("div.shadow_layer").show();
@@ -35,13 +36,14 @@ $(".ext_view").click(function() {
     var div_h = $("div.view_layer").height();
 
     var img_src = "";
-    if (div_h > 800) {
+    if (div_h > 600) {
         img_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "1200x1200");
     } else {
         img_src = $(this).parent().parent().find("div._layout-thumbnail").children("img").attr("src").replace("150x150", "600x600");
     }
-
     var img = new Image();
+
+    // 圖片讀取後再做，否則會拿不到圖片的寬高
     img.onload = function() {
 
         console.log("img: " + img.naturalWidth + ", " + img.naturalHeight);
@@ -49,23 +51,29 @@ $(".ext_view").click(function() {
 
         if (img.naturalHeight > div_h) {
             img.height = div_h;
-
-            if (img.Width > div_w) {
-                img.Width = div_w;
+            console.log("img.height:" + img.height);
+            if (img.width > div_w) {
+                img.width = div_w;
+                console.log("img.width:" + img.width);
             }
-        }
-
-        if (img.naturalWidth > div_w) {
-            img.Width = div_w;
+        } else if (img.naturalWidth > div_w) {
+            img.width = div_w;
 
             if (img.height > div_h) {
                 img.height = div_h;
             }
         }
+
+        // 調整div位置讓圖片置中
+        $("div.view_layer").css("margin-left", -img.width/2);
+        $("div.view_layer").css("margin-top", -img.height/2);
+        img.style.display = "block";
     };
+
+    // 設定好圖片的類別然後插到 div 中
     img.src = img_src;
     img.className = "view_img";
-
+    img.style.display = "none";
     $("div.view_layer").append(img);
 
 

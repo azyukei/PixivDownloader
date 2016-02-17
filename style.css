@@ -63,15 +63,9 @@ div.view_layer {
     position: fixed;
     width: 80%;
     height: 80%;
-    /*margin-top: auto;
-    margin-bottom: auto;
-    margin-left: auto;
-    margin-right: auto;*/
+    top: 50%;
+    left: 50%;
     vertical-align: middle;
+    margin-left: 0px;
+    margin-top: 0px;
 }
-
-img.view_img {
-    position: fixed;
-   
-}
-
