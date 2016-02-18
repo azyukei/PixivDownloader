@@ -46,27 +46,26 @@ $(".ext_view").click(function() {
     // 圖片讀取後再做，否則會拿不到圖片的寬高
     img.onload = function() {
 
-        console.log("img: " + img.naturalWidth + ", " + img.naturalHeight);
-        console.log("div: " + div_w + ", " + div_h);
+		var view_img = $("img.view_img");
+		var naturalWidth = view_img.get(0).naturalWidth;
+		var naturalHeight = view_img.get(0).naturalHeight;
 
-        if (img.naturalHeight > div_h) {
-            img.height = div_h;
-            console.log("img.height:" + img.height);
-            if (img.width > div_w) {
-                img.width = div_w;
-                console.log("img.width:" + img.width);
+        if (naturalHeight > div_h) {
+            view_img.height(div_h);
+            if (view_img.width() > div_w) {
+                view_img.width(div_w);
             }
-        } else if (img.naturalWidth > div_w) {
-            img.width = div_w;
+        } else if (naturalWidth > div_w) {
+            view_img.width(div_w);
 
-            if (img.height > div_h) {
-                img.height = div_h;
+            if (view_img.height() > div_h) {
+                view_img.height(div_h);
             }
         }
 
         // 調整div位置讓圖片置中
-        $("div.view_layer").css("margin-left", -img.width/2);
-        $("div.view_layer").css("margin-top", -img.height/2);
+        $("div.view_layer").css("margin-left", -view_img.width()/2);
+        $("div.view_layer").css("margin-top", -view_img.height()/2);
         img.style.display = "block";
     };
 
