@@ -286,7 +286,7 @@ function sent_to_background(source_link, filename, type, callback) {
             filename: filename,
             type: type
         }, function(response) {
-
+            callback(response.status);
         });
 }
 

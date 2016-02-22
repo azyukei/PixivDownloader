@@ -10,8 +10,8 @@ var download_queue = [];
 
 // 設定 on Message event listener 接收下載任務
 chrome.runtime.onMessage.addListener(function(download_task, sender, sendResponse) {
-    download_queue.push(download_task);
-
+    //download_queue.push(download_task);
+    sendResponse({"status": "OK"});
 });
 
 

@@ -27,7 +27,7 @@ $("body").prepend('<div class="shadow_layer"><span class="close_layer" >✖</spa
 
 // 按下預覽按鈕
 $(".ext_view").click(function() {
-	// 移除舊的 img
+    // 移除舊的 img
     $("img").remove(".view_img");
     $("div.view_layer").show();
     $("div.shadow_layer").show();
@@ -46,9 +46,9 @@ $(".ext_view").click(function() {
     // 圖片讀取後再做，否則會拿不到圖片的寬高
     img.onload = function() {
 
-		var view_img = $("img.view_img");
-		var naturalWidth = view_img.get(0).naturalWidth;
-		var naturalHeight = view_img.get(0).naturalHeight;
+        var view_img = $("img.view_img");
+        var naturalWidth = view_img.get(0).naturalWidth;
+        var naturalHeight = view_img.get(0).naturalHeight;
 
         if (naturalHeight > div_h) {
             view_img.height(div_h);
@@ -64,8 +64,8 @@ $(".ext_view").click(function() {
         }
 
         // 調整div位置讓圖片置中
-        $("div.view_layer").css("margin-left", -view_img.width()/2);
-        $("div.view_layer").css("margin-top", -view_img.height()/2);
+        $("div.view_layer").css("margin-left", -view_img.width() / 2);
+        $("div.view_layer").css("margin-top", -view_img.height() / 2);
         img.style.display = "block";
     };
 
@@ -90,8 +90,8 @@ $("div.shadow_layer").click(function() {
 
 // 按下下載按鈕
 $(".ext_download").click(function() {
-    $(this).off("click");               // 暫時停止 click event 避免重複下載
-    $(this).prop( "disabled", true );   // 暫時禁止按鈕 避免重複下載
+    $(this).off("click");           // 暫時關閉 click event 避免重複下載
+    $(this).prop("disabled", true); // 暫時禁止按鈕 避免重複下載
     var works = get_works($(this));
     parse_img_src(works);
     get_manga_link(works);
@@ -106,8 +106,10 @@ $(".ext_download").click(function() {
 
                 check_type(work, function(work, type) {
                     for (var i = 0; i < work.source_links.length; i++) {
-                        sent_to_background(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function() {
-                            
+                        sent_to_background(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(respond) {
+                            console.log($(this).attr("class") + ", " + respond);
+                            $(this).on("click");                // 取消關閉 click event
+                            $(this).prop("disabled", false);    // 取消禁止按鈕
                         });
 
                         // request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
