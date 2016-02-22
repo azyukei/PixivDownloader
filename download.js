@@ -1,3 +1,5 @@
+// Background page
+
 // 接收下載訊息
 // Set on Message event listener
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
