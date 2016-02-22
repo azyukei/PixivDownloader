@@ -3,17 +3,17 @@ var url = window.location.href;
 
 // 加入收藏按鈕
 if (url.search("bookmark.php") > 0) {
-    $("nav.column-order-menu").append('<span class="_button ext_download bookmark_download_all">整頁下載</a>');
+    $("nav.column-order-menu").append('<input class="_button ext_download bookmark_download_all" type="button" value="整頁下載">');
 }
 
 // 加入作品列表按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
-    $("ul.column-order-menu").append('<span class="_button ext_download member_illust_download_all">整頁下載</a>');
+    $("ul.column-order-menu").append('<input class="_button ext_download member_illust_download_all" type="button" value="整頁下載">');
 }
 
 // 加入插圖按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-    $("div.bookmark-container").append('<span class="_button ext_download illust_download">下載</a>');
+    $("div.bookmark-container").append('<input class="_button ext_download illust_download" type="button" value="下載">');
 }
 
 // 加入預覽圖按鈕
