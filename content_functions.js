@@ -1,6 +1,6 @@
 /**
  * 傳入按鈕 selector ，判斷現在頁面，建立 works 並回傳
- * @param  {object} button	jQuery selected button.
+ * @param  {object} button  jQuery selected button.
  * @return {[object]} works [work]
  */
 function get_works(button) {
@@ -146,7 +146,7 @@ function get_works(button) {
 
 /**
  * 判斷是否為相簿
- * @param  {object} work	jQuery selected a.work.
+ * @param  {object} work    jQuery selected a.work.
  * @return {Boolean} Is target an album or manga.
  */
 function is_multiple_work(a_work) {
@@ -155,7 +155,7 @@ function is_multiple_work(a_work) {
 
 /**
  * 判斷是否為動圖
- * @param  {object} work	jQuery selected a.work.
+ * @param  {object} work    jQuery selected a.work.
  * @return {Boolean} Is target a ugoku.
  */
 function is_ugoku_work(a_work) {
@@ -234,8 +234,8 @@ function get_source_link(work) {
  */
 function get_filename(work) {
     var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
-    filename = filename.replace(/[\\/:|]/g, " ");	// 過濾特殊字元
-    filename = filename.replace(/[*?"<>]/g, "");	// 過濾特殊字元g
+    filename = filename.replace(/[\\/:|]/g, " "); // 過濾特殊字元
+    filename = filename.replace(/[*?"<>]/g, ""); // 過濾特殊字元g
     if (work.multiple) {
         for (var i = 0; i < work.source_links.length; i++) {
 
@@ -252,7 +252,7 @@ function get_filename(work) {
  * @param  {Function} callback function(work, type)
  */
 function check_type(work, callback) {
-	var type;
+    var type;
     var xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.open("GET", work.source_links[0] + ".png");
@@ -262,7 +262,7 @@ function check_type(work, callback) {
                 work.type = "jpg";
                 type = "image/jpeg";
             } else if (xhr.status == 200) {
-            	work.type = "png";
+                work.type = "png";
                 type = "image/png";
                 console.log(xhr.getAllResponseHeaders());
             }
@@ -274,51 +274,23 @@ function check_type(work, callback) {
 }
 
 /**
- * @param  {string} source_link 含副檔名
- * @param  {string} filename
- * @param  {string} type blob type
- * @param  {Function}
- */
-function request_source(source_link, filename, type, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.responseType = "blob";
-	xhr.open("GET", source_link);
-	xhr.onreadystatechange = function(e) {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var blob = new Blob([xhr.response], {
-				type: type
-			});
-			callback(blob, filename);
-		}
-	}
-	xhr.send(null);
-}
-
-/**
- * 用 Blob 建立下載連結
- * @param  {Blob} blob
- * @return {string} download_url
- */
-function get_download_url(blob) {
-    var urlCreator = window.URL || window.webkitURL;
-    return urlCreator.createObjectURL(blob);
-}
-
-/**
- * 傳送下載連結給 background page 請他下載檔案
- * @param  {string} download_url
+ * 將下載任務傳給 background page 執行
+ * @param  {string}   source_link
+ * @param  {string}   filename
+ * @param  {string}   type
  * @param  {Function} callback
  */
-function send_download_message(download_url, filename, callback) {
+function sent_to_background(source_link, filename, type, callback) {
     chrome.runtime.sendMessage({
-        download_url: download_url,
-        filename: filename
-    }, function(response) {
-        //console.log(response.farewell);
-    });
+            source_link: source_link,
+            filename: filename,
+            type: type
+        }, function(response) {
+
+        });
 }
 
 function hide_layer() {
-	$("div.view_layer").hide();
+    $("div.view_layer").hide();
     $("div.shadow_layer").hide();
 }
