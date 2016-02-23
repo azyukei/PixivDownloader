@@ -88,11 +88,6 @@ $("div.shadow_layer").click(function() {
 	hide_layer();
 });
 
-function hide_layer() {
-	$("div.view_layer").hide();
-	$("div.shadow_layer").hide();
-}
-
 // 按下下載按鈕
 $(".ext_download").click(function() {
 	$(this).off("click"); // 暫時關閉 click event 避免重複下載
@@ -134,16 +129,3 @@ $(".ext_download").click(function() {
 	// 	}
 	// }
 });
-
-/**
- * 將 works 傳給 background page 處理
- * @param  {[object]} works
- * @param  {Function} callback
- */
-function sent_to_background(works, callback) {
-	chrome.runtime.sendMessage({
-		works: works
-	}, function(response) {
-		callback(response.status);
-	});
-}

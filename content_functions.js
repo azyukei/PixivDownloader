@@ -1,4 +1,12 @@
 /**
+ * 隱藏預覽相關介面
+ */
+function hide_layer() {
+	$("div.view_layer").hide();
+	$("div.shadow_layer").hide();
+}
+
+/**
  * 傳入按鈕 selector ，判斷現在頁面，建立 works 並回傳
  * @param  {object} button  jQuery selected button.
  * @return {[object]} works [work]
@@ -184,4 +192,17 @@ function get_manga_link(works) {
 			works[i].manga_link = link.replace("medium", "manga");
 		}
 	}
+}
+
+/**
+ * 將 works 傳給 background page 處理
+ * @param  {[object]} works
+ * @param  {Function} callback
+ */
+function sent_to_background(works, callback) {
+	chrome.runtime.sendMessage({
+		works: works
+	}, function(response) {
+		callback(response.status);
+	});
 }
