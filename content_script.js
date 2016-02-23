@@ -88,6 +88,11 @@ $("div.shadow_layer").click(function() {
 	hide_layer();
 });
 
+function hide_layer() {
+	$("div.view_layer").hide();
+	$("div.shadow_layer").hide();
+}
+
 // 按下下載按鈕
 $(".ext_download").click(function() {
 	$(this).off("click"); // 暫時關閉 click event 避免重複下載
@@ -98,36 +103,47 @@ $(".ext_download").click(function() {
 
 	// TODO
 	// 取完資料 包好以後直接整包傳給 background page
-	// callback function set on("click") 和 disabled false 
-
-
+	sent_to_background(works, function(respond) {
+		$(this).on("click"); // 取消關閉 click event
+		$(this).prop("disabled", false); // 取消禁止按鈕
+	});
 
 
 	// 非同步函式
-	for (var i = 0; i < works.length; i++) {
-		if (!works[i].ugoku) {
-			get_work_pages(works[i], function(work) {
+	// for (var i = 0; i < works.length; i++) {
+	// 	if (!works[i].ugoku) {
+	// 		get_work_pages(works[i], function(work) {
 
-				get_source_link(work);
-				get_filename(work);
+	// 			get_source_link(work);
+	// 			get_filename(work);
 
-				check_type(work, function(work, type) {
-					for (var i = 0; i < work.source_links.length; i++) {
-						sent_to_background(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(respond) {
-							console.log($(this).attr("class") + ", " + respond);
-							$(this).on("click"); // 取消關閉 click event
-							$(this).prop("disabled", false); // 取消禁止按鈕
-						});
+	// 			check_type(work, function(work, type) {
+	// 				for (var i = 0; i < work.source_links.length; i++) {
+	// 					sent_to_background(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(respond) {
+	// 					});
 
-						// request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
-						//     var download_url = get_download_url(blob);
-						//     send_download_message(download_url, filename, function() {
-						//         // TODO - 下載後做些什麼？
-						//     });
-						// });
-					}
-				});
-			});
-		}
-	}
+	// 					request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
+	// 					    var download_url = get_download_url(blob);
+	// 					    send_download_message(download_url, filename, function() {
+	// 					        // TODO - 下載後做些什麼？
+	// 					    });
+	// 					});
+	// 				}
+	// 			});
+	// 		});
+	// 	}
+	// }
 });
+
+/**
+ * 將 works 傳給 background page 處理
+ * @param  {[object]} works
+ * @param  {Function} callback
+ */
+function sent_to_background(works, callback) {
+	chrome.runtime.sendMessage({
+		works: works
+	}, function(response) {
+		callback(response.status);
+	});
+}
