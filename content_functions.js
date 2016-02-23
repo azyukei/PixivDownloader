@@ -34,8 +34,7 @@ function get_works(button) {
 						"manga_link": "",
 						"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 						"source_links": [],
-						"filename": [],
-						"blob_links": []
+						"filename": []
 					});
 				});
 			}
@@ -65,8 +64,7 @@ function get_works(button) {
 				"manga_link": "",
 				"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 				"source_links": [],
-				"filename": [],
-				"blob_links": []
+				"filename": []
 			});
 		});
 	}
@@ -93,8 +91,7 @@ function get_works(button) {
 			"manga_link": "",
 			"img_src": "",
 			"source_links": [],
-			"filename": [],
-			"blob_links": []
+			"filename": []
 		}
 
 		// 判斷類型寫入資料
@@ -136,8 +133,7 @@ function get_works(button) {
 			"manga_link": "",
 			"img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
 			"source_links": [],
-			"filename": [],
-			"blob_links": []
+			"filename": []
 		});
 	}
 
