@@ -1,24 +1,24 @@
 div.filename {
-	margin: 10px;
-	width: 80%;
-	height: 20px;
-	border: 1px;
-	border-radius: 3px;
+  margin: 10px;
+  width: 80%;
+  height: 20px;
+  border: 1px;
+  border-radius: 3px;
 }
 
 div.data_element {
-	margin: 10px;
-	width: 80%;
-	height: 20px;
-	border: 1px;
-	border-radius: 3px;
+  margin: 10px;
+  width: 80%;
+  height: 20px;
+  border: 1px;
+  border-radius: 3px;
 }
 
 label.data_label {
-    background: #258fb8;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: 0;
+  background: #258fb8;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 0;
 }

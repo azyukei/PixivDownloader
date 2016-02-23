@@ -1,71 +1,71 @@
 li.image-item:hover div.extension-button {
-    display: block;
+  display: block;
 }
 
 li.image-item div.extension-button {
-    z-index: 2;
-    position: absolute;
-    display: none;
-    opacity: 0.8;
-    top: 0;
-    left: 13px;
+  z-index: 2;
+  position: absolute;
+  display: none;
+  opacity: 0.8;
+  top: 0;
+  left: 13px;
 }
 
 nav.column-order-menu span.ext_button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 7px;
-    margin-right: 7px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 7px;
+  margin-right: 7px;
 }
 
 ul.column-order-menu span.ext_button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 7px;
-    margin-right: 7px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 7px;
+  margin-right: 7px;
 }
 
 div.bookmark-container span.ext_button {
-    float: right;
+  float: right;
 }
 
 a.edit-bookmark.button-on + span.ext_button {
-    margin-top: -2px;
+  margin-top: -2px;
 }
 
 div.shadow_layer {
-    display: none;
-    z-index: 9999;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;  
-    background: #000;
-    opacity: 0.8;
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.8;
 }
 
 span.close_layer {
-    z-index: 10000;
-    font-size: 28px;
-    color: #fff;
-    position: fixed;
-    top: 10px;
-    right: 17px;
-    cursor: pointer;
+  z-index: 10000;
+  font-size: 28px;
+  color: #fff;
+  position: fixed;
+  top: 10px;
+  right: 17px;
+  cursor: pointer;
 }
 
 div.view_layer {
-    display: none;
-    z-index: 10002;
-    position: fixed;
-    width: 80%;
-    height: 80%;
-    top: 50%;
-    left: 50%;
-    vertical-align: middle;
-    margin-left: 0px;
-    margin-top: 0px;
+  display: none;
+  z-index: 10002;
+  position: fixed;
+  width: 80%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  vertical-align: middle;
+  margin-left: 0px;
+  margin-top: 0px;
 }
