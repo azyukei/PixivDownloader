@@ -99,7 +99,7 @@ function get_works(button) {
 			"manga_link": "",
 			"img_src": "",
 			"source_links": [],
-			"filenames: []
+			"filenames": []
 		}
 
 		// 判斷類型寫入資料
