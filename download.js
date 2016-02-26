@@ -1,17 +1,61 @@
 // Background page
 
-// 下載任務的 array
-var download_tasks = [];
-
 // 設定 on Message event listener 接收下載任務
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	//download_queue.push(download_task);
 	console.log(sender);
 	// 接收任務以後交給函式處理，完成後呼叫 callback 來讓 content function 收到 response
 	do_task(message.works, function() {
-		sendResponse({ "status": "OK" });
+		sendResponse();
 	});
 });
+
+/**
+ * 將 content script 傳來的資料加入下載任務中
+ * @param {[type]}   works    [description]
+ * @param {Function} callback [description]
+ */
+function do_task(works, callback) {
+	// 將 works 中的所有 work 拆開去準備下載
+	for (var i = 0; i < works.length; i++) {
+		// 確認每個 work 中的影像數量
+		get_work_pages(works[i], function(work) {
+			// 取得原圖連結
+			get_source_link(work);
+			// 取得檔案名稱
+			get_filename(work);
+			// TODO: 將要下載的檔案顯示在 popup 介面中
+
+			// 檢查檔案類型
+			check_type(work, function(work, type) {
+				// 將 work 中的每個原圖連結分開處理
+				for (var i = 0; i < work.source_links.length; i++) {
+					// 將不含副檔名的 source_link 取出並加上副檔名
+					var source_link = work.source_links[i] + "." + work.type;
+					// 將不含副檔名的 filename 取出並加上副檔名
+					var filename = work.filenames[i] + "." + work.type;
+					// 取得 blob
+					// TODO: 這邊需要做一個排隊的功能
+
+					// 用 source_link 取回 blob
+					request_source(source_link, function(blob) {
+						// 將 blob 變成最後要下載的連結
+						var download_url = get_download_url(blob);
+						// 下載影像！
+						download_image(download_url, filename, function() {
+							// TODO: 下載結束後需對 popup 介面做些更動
+
+							// 呼叫 callback 一路往回呼叫到 content_script 中將下載按鈕的暫停狀態復原
+							callback();
+						});
+					});
+				}
+			});
+		});
+	}
+}
+
+
 
 
 /**
