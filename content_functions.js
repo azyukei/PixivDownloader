@@ -38,7 +38,7 @@ function get_works(button) {
 						"multiple": is_multiple_work($(this)),
 						"ugoku": is_ugoku_work($(this)),
 						"site": "",
-						"link": $(this).attr("href"),
+						"link": "http://www.pixiv.net/" + $(this).attr("href"),
 						"manga_link": "",
 						"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 						"source_links": [],
@@ -68,7 +68,7 @@ function get_works(button) {
 				"multiple": is_multiple_work($(this)),
 				"ugoku": is_ugoku_work($(this)),
 				"site": "",
-				"link": $(this).attr("href"),
+				"link": "http://www.pixiv.net/" + $(this).attr("href"),
 				"manga_link": "",
 				"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 				"source_links": [],
@@ -137,7 +137,7 @@ function get_works(button) {
 			"multiple": is_multiple_work(a_work),
 			"ugoku": is_ugoku_work(a_work),
 			"site": "",
-			"link": a_work.attr("href"),
+			"link": "http://www.pixiv.net/" + a_work.attr("href"),
 			"manga_link": "",
 			"img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
 			"source_links": [],
@@ -192,19 +192,4 @@ function get_manga_link(works) {
 			works[i].manga_link = link.replace("medium", "manga");
 		}
 	}
-}
-
-/**
- * 將 works 傳給 background page 處理
- * @param  {[object]} works
- * @param  {Function} callback
- */
-function sent_to_background(works, callback) {
-	chrome.runtime.sendMessage({
-		works: works
-	}, function() {
-		// TODO: 需加上對 popup 介面上的任務處理
-		// 這個函式下載結束後才會被呼叫，然後在呼叫 callback 函式來告訴 content script 下載已結束
-		callback();
-	});
 }
