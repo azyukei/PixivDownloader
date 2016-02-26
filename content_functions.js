@@ -42,7 +42,7 @@ function get_works(button) {
 						"manga_link": "",
 						"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 						"source_links": [],
-						"filename": []
+						"filenames": []
 					});
 				});
 			}
@@ -72,7 +72,7 @@ function get_works(button) {
 				"manga_link": "",
 				"img_src": $(this).children("div._layout-thumbnail").children("img").attr("src"),
 				"source_links": [],
-				"filename": []
+				"filenames": []
 			});
 		});
 	}
@@ -99,7 +99,7 @@ function get_works(button) {
 			"manga_link": "",
 			"img_src": "",
 			"source_links": [],
-			"filename": []
+			"filenames: []
 		}
 
 		// 判斷類型寫入資料
@@ -141,7 +141,7 @@ function get_works(button) {
 			"manga_link": "",
 			"img_src": a_work.children("div._layout-thumbnail").children("img").attr("src"),
 			"source_links": [],
-			"filename": []
+			"filenames": []
 		});
 	}
 
@@ -202,8 +202,9 @@ function get_manga_link(works) {
 function sent_to_background(works, callback) {
 	chrome.runtime.sendMessage({
 		works: works
-	}, function(response) {
+	}, function() {
+		// TODO: 需加上對 popup 介面上的任務處理
 		// 這個函式下載結束後才會被呼叫，然後在呼叫 callback 函式來告訴 content script 下載已結束
-		callback(response.status);
+		callback();
 	});
 }
