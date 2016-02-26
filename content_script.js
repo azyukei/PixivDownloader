@@ -114,7 +114,6 @@ $(".ext_download").click(function() {
 					var source_link = work.source_links[i] + "." + work.type;
 					// 將不含副檔名的 filename 取出並加上副檔名
 					var filename = work.filenames[i] + "." + work.type;
-					console.log(filename);
 
 					// TODO: 這邊需要做一個排隊的功能
 
@@ -126,6 +125,7 @@ $(".ext_download").click(function() {
 						send_download_task(download_url, filename, function() {
 							// TODO: 下載結束後需對 popup 介面做些更動
 
+							// TODO: 想辦法讓被暫停的按鈕恢復
 							// 下載結束後會被呼叫，還原暫停下載按鈕的狀態
 							$(this).on("click"); // 取消關閉 click event
 							$(this).prop("disabled", false); // 取消禁止按鈕
