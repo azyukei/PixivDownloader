@@ -203,6 +203,7 @@ function sent_to_background(works, callback) {
 	chrome.runtime.sendMessage({
 		works: works
 	}, function(response) {
+		// 這個函式下載結束後才會被呼叫，然後在呼叫 callback 函式來告訴 content script 下載已結束
 		callback(response.status);
 	});
 }

@@ -96,9 +96,9 @@ $(".ext_download").click(function() {
 	parse_img_src(works);
 	get_manga_link(works);
 
-	// TODO
-	// 取完資料 包好以後直接整包傳給 background page
+	// 將資料準備好以後，直接整包傳給 background page
 	sent_to_background(works, function(respond) {
+		// 下載結束後會被呼叫，還原暫停下載按鈕的狀態
 		$(this).on("click"); // 取消關閉 click event
 		$(this).prop("disabled", false); // 取消禁止按鈕
 	});
