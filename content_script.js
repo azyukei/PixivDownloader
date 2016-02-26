@@ -96,13 +96,42 @@ $(".ext_download").click(function() {
 	parse_img_src(works);
 	get_manga_link(works);
 
-	// 將資料準備好以後，直接整包傳給 background page
-	chrome.runtime.sendMessage({
-		works: works
-	}, function(response) {
-		console.log(response);
-		// 下載結束後會被呼叫，還原暫停下載按鈕的狀態
-		$(this).on("click"); // 取消關閉 click event
-		$(this).prop("disabled", false); // 取消禁止按鈕
-	});
+	// 將 works 中的所有 work 拆開去準備下載
+	for (var i = 0; i < works.length; i++) {
+		// 確認每個 work 中的影像數量
+		get_work_pages(works[i], function(work) {
+			// 取得原圖連結
+			get_source_link(work);
+			// 取得檔案名稱
+			get_filename(work);
+			// TODO: 將要下載的檔案顯示在 popup 介面中
+
+			// 檢查檔案類型
+			check_type(work, function(work, type) {
+				// 將 work 中的每個原圖連結分開處理
+				for (var i = 0; i < work.source_links.length; i++) {
+					// 將不含副檔名的 source_link 取出並加上副檔名
+					var source_link = work.source_links[i] + "." + work.type;
+					// 將不含副檔名的 filename 取出並加上副檔名
+					var filename = work.filenames[i] + "." + work.type;
+					// 取得 blob
+					// TODO: 這邊需要做一個排隊的功能
+
+					// 用 source_link 取回 blob
+					request_source(source_link, function(blob) {
+						// 將 blob 變成最後要下載的連結
+						var download_url = get_download_url(blob);
+						// 下載影像！
+						send_download_task(download_url, filename, function() {
+							// TODO: 下載結束後需對 popup 介面做些更動
+
+							// 下載結束後會被呼叫，還原暫停下載按鈕的狀態
+							$(this).on("click"); // 取消關閉 click event
+							$(this).prop("disabled", false); // 取消禁止按鈕
+						});
+					});
+				}
+			});
+		});
+	}
 });

@@ -193,3 +193,133 @@ function get_manga_link(works) {
 		}
 	}
 }
+
+/**
+ * 分析漫畫連結來取得作品頁數
+ * @param  {object} work
+ * @return {string} pages
+ */
+function get_work_pages(work, callback) {
+	if (work.multiple) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", work.manga_link, true);
+		xhr.send();
+
+		xhr.onload = function() {
+			// 200 成功
+			if (xhr.status == 200) {
+				var html = $.parseHTML(xhr.response);
+				work.pages = $(html).find("span.total").text();
+
+				callback(work);
+			} else {
+				console.log(xhr.status);
+			}
+		}
+	} else {
+		callback(work);
+	}
+
+}
+
+/**
+ * 組成原圖連結
+ * @param  {object} work
+ */
+function get_source_link(work) {
+	for (var i = 0; i < work.pages; i++) {
+		work.source_links[i] = "http://i" + work.site + ".pixiv.net/img-original/img/" + work.date + "/" + work.time + "/" + work.id + "_p" + i;
+	}
+}
+
+/**
+ * 根據設定建立檔案名稱
+ * @param  {object} work
+ */
+function get_filename(work) {
+	var filename = work.user_name + "-" + work.title + "(" + work.id + ")";
+	filename = filename.replace(/[\\/:|]/g, " "); // 過濾特殊字元
+	filename = filename.replace(/[*?"<>]/g, ""); // 過濾特殊字元g
+	if (work.multiple) {
+		for (var i = 0; i < work.source_links.length; i++) {
+
+			work.filenames[i] = filename + "_p" + i;
+		}
+	} else {
+		work.filenames[0] = filename;
+	}
+}
+
+/**
+ * 確認檔案類型，在 HEADERS_RECEIVED 狀態就終止，不要下載
+ * @param  {object} work
+ * @param  {Function} callback function(work, type)
+ */
+function check_type(work, callback) {
+	var type;
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = "blob";
+	xhr.open("GET", work.source_links[0] + ".png");
+	xhr.onreadystatechange = function(e) {
+		if (xhr.readyState == 2) {
+			if (xhr.status == 404) {
+
+				work.type = "jpg";
+				type = "image/jpeg";
+			} else if (xhr.status == 200) {
+				work.type = "png";
+				type = "image/png";
+				console.log(xhr.getAllResponseHeaders());
+			}
+			xhr.abort();
+			callback(work, type);
+		}
+	};
+	xhr.send(null);
+}
+
+/**
+ * @param  {string} source_link 含副檔名
+ * @param  {string} filename
+ * @param  {string} type blob type
+ * @param  {Function}
+ */
+function request_source(source_link, filename, type, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = "blob";
+	xhr.open("GET", source_link);
+	xhr.onreadystatechange = function(e) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var blob = new Blob([xhr.response], {
+				type: type
+			});
+			callback(blob, filename);
+		}
+	}
+	xhr.send(null);
+}
+
+/**
+ * 用 Blob 建立下載連結
+ * @param  {Blob} blob
+ * @return {string} download_url
+ */
+function get_download_url(blob) {
+	var urlCreator = window.URL || window.webkitURL;
+	return urlCreator.createObjectURL(blob);
+}
+
+/**
+ * 傳送下載任務給 download.js background page
+ * @param  {string}   download_url 下載網址
+ * @param  {string}   filename     檔案名稱
+ * @param  {Function} callback     callback 函式
+ */
+function send_download_task(download_url, filename, callback) {
+	chrome.runtime.sendMessage({
+		download_url: download_url,
+		filename: filename
+	}, function() {
+		callback();
+	});
+}
