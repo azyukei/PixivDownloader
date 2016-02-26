@@ -1,19 +1,14 @@
 // Background page
-var download_queue = [];
 
-
-
-
-
-
-
+// 下載任務的 array
+var download_tasks = [];
 
 // 設定 on Message event listener 接收下載任務
-chrome.runtime.onMessage.addListener(function(download_task, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	//download_queue.push(download_task);
 	console.log(sender);
 	// 接收任務以後交給函式處理，完成後呼叫 callback 來讓 content function 收到 response
-	quest(download_task.works, function() {
+	do_task(message.works, function() {
 		sendResponse({ "status": "OK" });
 	});
 });
