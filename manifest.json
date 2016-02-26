@@ -16,7 +16,7 @@
 
   "background": {
     "persistent": false,
-    "scripts": ["download.js"]
+    "scripts": ["jquery-2.2.0.min.js", "download.js"]
   },
 
   "content_scripts": [{
