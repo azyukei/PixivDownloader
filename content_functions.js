@@ -7,9 +7,9 @@ function hide_layer() {
 }
 
 /**
- * 傳入按鈕 selector ，判斷現在頁面，建立 works 並回傳
- * @param  {object} button  jQuery selected button.
- * @return {[object]} works [work]
+ * 傳入按鈕的 jquery selector，判斷目前所在的頁面並建立 works 物件回傳
+ * @param  {object}	button	jQuery selected button
+ * @return {[object]} works 物件，包含作品的相關資訊
  */
 function get_works(button) {
 
