@@ -102,27 +102,4 @@ $(".ext_download").click(function() {
 		$(this).on("click"); // 取消關閉 click event
 		$(this).prop("disabled", false); // 取消禁止按鈕
 	});
-
-
-	// 非同步函式
-	// for (var i = 0; i < works.length; i++) {
-	// 	if (!works[i].ugoku) {
-	// 		get_work_pages(works[i], function(work) {
-
-	// 			get_source_link(work);
-	// 			get_filename(work);
-
-	// 			check_type(work, function(work, type) {
-	// 				for (var i = 0; i < work.source_links.length; i++) {
-	// 					request_source(work.source_links[i] + "." + work.type, work.filename[i] + "." + work.type, type, function(blob, filename) {
-	// 					    var download_url = get_download_url(blob);
-	// 					    send_download_message(download_url, filename, function() {
-	// 					        // TODO - 下載後做些什麼？
-	// 					    });
-	// 					});
-	// 				}
-	// 			});
-	// 		});
-	// 	}
-	// }
 });
