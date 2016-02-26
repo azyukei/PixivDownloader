@@ -114,11 +114,12 @@ $(".ext_download").click(function() {
 					var source_link = work.source_links[i] + "." + work.type;
 					// 將不含副檔名的 filename 取出並加上副檔名
 					var filename = work.filenames[i] + "." + work.type;
-					// 取得 blob
+					console.log(filename);
+
 					// TODO: 這邊需要做一個排隊的功能
 
 					// 用 source_link 取回 blob
-					request_source(source_link, function(blob) {
+					request_source(source_link, filename, type, function(blob, filename) {
 						// 將 blob 變成最後要下載的連結
 						var download_url = get_download_url(blob);
 						// 下載影像！
