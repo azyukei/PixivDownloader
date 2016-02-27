@@ -253,10 +253,10 @@ function get_filename(work) {
 /**
  * 確認檔案類型，在 HEADERS_RECEIVED 狀態就終止，不要下載
  * @param  {object} work
- * @param  {Function} callback function(work, type)
+ * @param  {Function} callback function(work, blob_type)
  */
 function check_type(work, callback) {
-	var type;
+	var blob_type;
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = "blob";
 	xhr.open("GET", work.source_links[0] + ".png");
@@ -265,17 +265,79 @@ function check_type(work, callback) {
 			if (xhr.status == 404) {
 
 				work.type = "jpg";
-				type = "image/jpeg";
+				blob_type = "image/jpeg";
 			} else if (xhr.status == 200) {
 				work.type = "png";
-				type = "image/png";
-				console.log(xhr.getAllResponseHeaders());
+				blob_type = "image/png";
 			}
 			xhr.abort();
-			callback(work, type);
+			callback(work, blob_type);
 		}
 	};
 	xhr.send(null);
+}
+
+/**
+ * 加入新的下載任務
+ * @param {[type]} download_task [description]
+ */
+function add_tasks(download_task) {
+	download_tasks.push(download_task);
+	// TODO: popup 要顯示出新的 task
+
+	//確認是否可執行新的下載任務
+	if (has_free_doing_tasks() && has_next_tasks()) {
+		// 可以，準備下一個下載任務
+		schedule_next_task();
+	}
+}
+
+/**
+ * 確認是否還有空間可執行新任務
+ * @return {Boolean}
+ */
+function has_free_doing_tasks() {
+	return doing_tasks < 1;
+}
+
+/**
+ * 確認是否還有下載任務可以做
+ * @return {Boolean}
+ */
+function has_next_tasks() {
+	return download_tasks.length > 0;
+}
+
+/**
+ * 安排新任務，並在結束任務後再安排下一個新任務
+ */
+function schedule_next_task() {
+	// 從 download_tasks 中取出最早加入的一個任務開始執行
+	start_task(download_tasks.shift(), function() {
+		// 任務完成後
+		doing_tasks -= 1; // 下載中任務-1
+		//確認是否可執行新的下載任務
+		if (has_free_doing_tasks() && has_next_tasks()) {
+			// 可以，準備下一個下載任務
+			schedule_next_task();
+		}
+	});
+	doing_tasks += 1; // 加入任務後，執行中下載任務+1
+}
+
+function start_task(download_task, callback) {
+	// 用 source_link 取回 blob
+	request_source(download_task, function(blob, filename) {
+		// 將 blob 變成最後要下載的連結
+		var download_url = get_download_url(blob);
+		// 下載影像！
+		send_download_message(download_url, filename, function() {
+			// 下載結束
+			// TODO: 對 popup 介面做些更動
+			download_task.callback();
+			callback(); // 回到 schedule_next_task() 判斷是否執行下一個任務
+		});
+	});
 }
 
 /**
@@ -284,17 +346,17 @@ function check_type(work, callback) {
  * @param  {string} type blob type
  * @param  {Function}
  */
-function request_source(source_link, filename, type, callback) {
+function request_source(download_task, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = "blob";
-	xhr.open("GET", source_link);
+	xhr.open("GET", download_task.source_link);
 	xhr.onprogress = update_progress;
 	xhr.onreadystatechange = function(e) {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var blob = new Blob([xhr.response], {
-				type: type
+				type: download_task.blob_type
 			});
-			callback(blob, filename);
+			callback(blob, download_task.filename);
 		}
 	}
 	xhr.send(null);
@@ -325,25 +387,11 @@ function get_download_url(blob) {
  * @param  {string}   filename     檔案名稱
  * @param  {Function} callback     callback 函式
  */
-function send_download_task(download_url, filename, callback) {
+function send_download_message(download_url, filename, callback) {
 	chrome.runtime.sendMessage({
 		download_url: download_url,
 		filename: filename
 	}, function() {
 		callback();
 	});
-}
-
-function schedule_tasks(download_task) {
-	download_tasks.push(download_task);
-	// TODO: popup 要顯示出新的 task
-
-	do_next_task();
-}
-
-
-function do_next_task() {
-	if (doing_tasks <= 5) {
-
-	}
 }
