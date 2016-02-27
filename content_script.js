@@ -18,7 +18,13 @@ if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
 
 // 加入預覽圖按鈕
 $("li.image-item").each(function() {
-	$(this).prepend('<div class="extension-button"><input class="_button ext_view thumbnail_view" type="button" value="🔍" /><br><input class="_button ext_download thumbnail_download" type="button" value="⬇︎" /></div>');
+	if($(this).children("a.work").length) {
+		// a.work 存在，代表不是消除或非公開
+		if (!($(this).children("a.work.ugoku-illust").length)) {
+			// 非 ugoku
+			$(this).prepend('<div class="extension-button"><input class="_button ext_view thumbnail_view" type="button" value="🔍" /><br><input class="_button ext_download thumbnail_download" type="button" value="⬇︎" /></div>');
+		}
+	}
 });
 
 // 插入瀏覽用的暗背景
