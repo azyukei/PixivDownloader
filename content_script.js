@@ -93,40 +93,34 @@ var doing_tasks = 0; // 目前下載中任務數量
 
 // 按下下載按鈕
 $(".ext_download").click(function() {
-	$(this).prop("disabled", true); // 暫時禁止按鈕 避免重複下載
-	var disabled_button = $(this); // 把被禁止的按鈕 selector 存下來
-	var works = get_works($(this));
-	parse_img_src(works);
-	get_manga_link(works);
+	$(this).prop("disabled", true);	// 暫時禁止按鈕 避免重複下載
+	var disabled_button = $(this);	// 把被禁止的按鈕 selector 存下來
+	var works = get_works($(this));	// 取得作品相關資訊
+	parse_img_src(works);			// 取得圖片連結
+	get_manga_link(works);			// 若為相簿，取得 manga 連結
 
-	var unfinished_works = works.length; // 未完成 works 數量，works[i] 中的所有圖片下載完後更動此變數回報
+	var unfinished_works = works.length;	// 未完成 works 數量，works[i] 中的所有圖片下載完後更動此變數回報
 
 	// 將 works 中的所有 work 拆開去準備下載
 	for (var i = 0; i < works.length; i++) {
 
 		// 確認每個 work 中的圖片數量
 		get_work_pages(works[i], function(work) {
-			// 取得原圖連結
-			get_source_link(work);
-			// 取得檔案名稱
-			get_filename(work);
-			// 設定為完成圖片數量
-			var unfinished_work = work.source_links.length;	// 未完成圖片數量，下載完成後更動此變數回報
+			get_source_link(work);	// 取得原圖連結
+			get_filename(work);		// 取得檔案名稱
+			var unfinished_work = work.source_links.length;	// 設定未完成圖片數量，下載完成後更動此變數回報
+
 			// TODO: 將要下載的檔案顯示在 popup 介面中
 
 			// 檢查檔案類型
 			check_type(work, function(work, type) {
 				// 將 work 中的每個原圖連結分開處理
 				for (var i = 0; i < work.source_links.length; i++) {
-					// 將不含副檔名的 source_link 取出並加上副檔名
-					var source_link = work.source_links[i] + "." + work.type;
-					// 將不含副檔名的 filename 取出並加上副檔名
-					var filename = work.filenames[i] + "." + work.type;
+					var source_link = work.source_links[i] + "." + work.type;	// 將不含副檔名的 source_link 取出並加上副檔名
+					var filename = work.filenames[i] + "." + work.type;			// 將不含副檔名的 filename 取出並加上副檔名
+					var download_task = { source_link: download_tasks, filename: filename };	// 建立下載任務
 
-					var download_task = { source_link: download_tasks, filename: filename };
-
-					// 將下載任務排到隊列中
-					schedule_tasks(download_task);
+					schedule_tasks(download_task);		// 將下載任務排到隊列中
 
 					// 用 source_link 取回 blob
 					request_source(source_link, filename, type, function(blob, filename) {
@@ -134,9 +128,10 @@ $(".ext_download").click(function() {
 						var download_url = get_download_url(blob);
 						// 下載影像！
 						send_download_task(download_url, filename, function() {
-							// TODO: 下載結束後需對 popup 介面做些更動
+							// 下載結束
+							// TODO: 對 popup 介面做些更動
 
-							// 下載結束，將為完成圖片數量-1
+							// 將為完成圖片數量-1
 							unfinished_work -= 1;
 							console.log("work: "+unfinished_work);
 							if (unfinished_work == 0) {
