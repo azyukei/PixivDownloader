@@ -110,8 +110,6 @@ $(".ext_download").click(function() {
 			get_filename(work);		// 取得檔案名稱
 			var unfinished_work = work.source_links.length;	// 設定未完成圖片數量，下載完成後更動此變數回報
 
-			// TODO: 將要下載的檔案顯示在 popup 介面中
-
 			// 檢查檔案類型
 			check_type(work, function(work, type) {
 				// 將 work 中的每個原圖連結分開處理
