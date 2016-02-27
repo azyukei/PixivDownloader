@@ -303,9 +303,9 @@ function request_source(source_link, filename, type, callback) {
 
 function update_progress(event) {
 	if (event.lengthComputable) {
-		console.log(event.loaded / event.total);
+		//console.log(event.loaded / event.total);
 	} else {
-		console.log(event.lengthComputable);
+		//console.log(event.lengthComputable);
 	}
 }
 
@@ -338,7 +338,7 @@ function schedule_tasks(download_task) {
 	download_tasks.push(download_task);
 	// TODO: popup 要顯示出新的 task
 
-	do_next_task();ㄕ
+	do_next_task();
 }
 
 

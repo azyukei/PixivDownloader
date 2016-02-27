@@ -93,9 +93,8 @@ var doing_tasks = 0; // 目前下載中任務數量
 
 // 按下下載按鈕
 $(".ext_download").click(function() {
-	$(this).off("click"); // 暫時關閉 click event 避免重複下載
 	$(this).prop("disabled", true); // 暫時禁止按鈕 避免重複下載
-	var pause_button = $(this); // 把被暫停的按鈕 selector 存下來
+	var disabled_button = $(this); // 把被禁止的按鈕 selector 存下來
 	var works = get_works($(this));
 	parse_img_src(works);
 	get_manga_link(works);
@@ -105,16 +104,14 @@ $(".ext_download").click(function() {
 	// 將 works 中的所有 work 拆開去準備下載
 	for (var i = 0; i < works.length; i++) {
 
-		var unfinished_work; // 未完成圖片數量，下載完成後更動此變數回報
-
 		// 確認每個 work 中的圖片數量
 		get_work_pages(works[i], function(work) {
-			// 設定為完成圖片數量
-			unfinished_work = works[i].pages;
 			// 取得原圖連結
 			get_source_link(work);
 			// 取得檔案名稱
 			get_filename(work);
+			// 設定為完成圖片數量
+			var unfinished_work = work.source_links.length;	// 未完成圖片數量，下載完成後更動此變數回報
 			// TODO: 將要下載的檔案顯示在 popup 介面中
 
 			// 檢查檔案類型
@@ -141,13 +138,15 @@ $(".ext_download").click(function() {
 
 							// 下載結束，將為完成圖片數量-1
 							unfinished_work -= 1;
+							console.log("work: "+unfinished_work);
 							if (unfinished_work == 0) {
 								// 若所有圖片下載完成，將為完成 works 數量-1
 								unfinished_works -= 1;
+								console.log("works: "+unfinished_works);
 								if (unfinished_works == 0) {
-									// 全部完成，取消按鈕暫停狀態
-									pause_button.on("click"); // 取消關閉 click event
-									pause_button.prop("disabled", false); // 取消禁止按鈕
+									console.log("復原按鈕狀態");
+									// 全部完成，取消按鈕禁止狀態
+									disabled_button.prop("disabled", false);
 								}
 							}
 						});
