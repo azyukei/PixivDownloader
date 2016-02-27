@@ -13,7 +13,10 @@ if (url.search("member_illust.php") > 0 && url.search("mode") < 0) {
 
 // 加入插圖按鈕
 if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
-	$("div.bookmark-container").append('<input class="_button ext_download illust_download" type="button" value="下載">');
+	if (!($("div.player.toggle").length)) {
+		// 非 ugoku
+		$("div.bookmark-container").append('<input class="_button ext_download illust_download" type="button" value="下載">');
+	}
 }
 
 // 加入預覽圖按鈕
