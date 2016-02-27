@@ -288,6 +288,7 @@ function request_source(source_link, filename, type, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.responseType = "blob";
 	xhr.open("GET", source_link);
+	xhr.onprogress = update_progress;
 	xhr.onreadystatechange = function(e) {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var blob = new Blob([xhr.response], {
@@ -297,6 +298,15 @@ function request_source(source_link, filename, type, callback) {
 		}
 	}
 	xhr.send(null);
+}
+
+
+function update_progress(event) {
+	if (event.lengthComputable) {
+		console.log(event.loaded / event.total);
+	} else {
+		console.log(event.lengthComputable);
+	}
 }
 
 /**
@@ -324,11 +334,11 @@ function send_download_task(download_url, filename, callback) {
 	});
 }
 
-function schedule_tasks(download_task, callback) {
-	download_task.push(download_task);
+function schedule_tasks(download_task) {
+	download_tasks.push(download_task);
 	// TODO: popup 要顯示出新的 task
 
-	callback();
+	do_next_task();
 }
 
 

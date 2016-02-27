@@ -88,8 +88,8 @@ $("div.shadow_layer").click(function() {
 	hide_layer();
 });
 
-var download_tasks = [];
-var doing_tasks = 0;
+var download_tasks = [];	// 下載任務
+var doing_tasks = 0;		// 目前下載中任務數量
 
 // 按下下載按鈕
 $(".ext_download").click(function() {
