@@ -21,7 +21,7 @@ if (url.search("member_illust.php") > 0 && url.search("mode") > 0) {
 
 // 加入預覽圖按鈕
 $("li.image-item").each(function() {
-	if($(this).children("a.work").length) {
+	if ($(this).children("a.work").length) {
 		// a.work 存在，代表不是消除或非公開
 		if (!($(this).children("a.work.ugoku-illust").length)) {
 			// 非 ugoku
@@ -103,7 +103,7 @@ var doing_tasks = 0; // 目前下載中任務數量
 // 按下下載按鈕
 $(".ext_download").click(function() {
 	$(this).prop("disabled", true); // 暫時禁止按鈕 避免重複下載
-	var disabled_button = $(this); // 把被禁止的按鈕 selector 存下來
+	var disabled_button = $(this);	// 把被禁止的按鈕 selector 存下來
 	var works = get_works($(this)); // 取得作品相關資訊
 	parse_img_src(works); // 取得圖片連結
 	get_manga_link(works); // 若為相簿，取得 manga 連結
@@ -155,6 +155,6 @@ $(".ext_download").click(function() {
 					add_tasks(download_task);
 				}
 			});
-		});
+		});g
 	}
 });

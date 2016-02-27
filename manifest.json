@@ -12,7 +12,7 @@
 
   "content_scripts": [{
     "matches": ["http://www.pixiv.net/*"],
-    "js": ["jquery-2.2.0.min.js", "content_functions.js", "content_script.js"],
+    "js": ["jquery-2.2.0.min.js", "circle-progress.js", "content_functions.js", "content_script.js"],
     "css": ["content_style.css"],
     "all_frames": true,
     "run_at": "document_end"
