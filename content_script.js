@@ -112,6 +112,11 @@ $(".ext_download").click(function() {
 
 	// 將 works 中的所有 work 拆開去準備下載
 	for (var i = 0; i < works.length; i++) {
+		if (works[i].ugoku) {
+			// 跳過 ugoku
+			unfinished_works -= 1;
+			continue;
+		}
 
 		// 確認每個 work 中的圖片數量
 		get_work_pages(works[i], function(work) {
@@ -128,7 +133,7 @@ $(".ext_download").click(function() {
 
 					// 建立下載任務
 					var download_task = {
-						source_link: download_tasks,
+						source_link: source_link,
 						filename: filename,
 						blob_type: blob_type,
 						callback: function() {
