@@ -323,3 +323,17 @@ function send_download_task(download_url, filename, callback) {
 		callback();
 	});
 }
+
+function schedule_tasks(download_task, callback) {
+	download_task.push(download_task);
+	// TODO: popup 要顯示出新的 task
+
+	callback();
+}
+
+
+function do_next_task() {
+	if (doing_tasks <= 5) {
+
+	}
+}

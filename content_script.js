@@ -88,10 +88,14 @@ $("div.shadow_layer").click(function() {
 	hide_layer();
 });
 
+var download_tasks = [];
+var doing_tasks = 0;
+
 // 按下下載按鈕
 $(".ext_download").click(function() {
-	$(this).off("click"); // 暫時關閉 click event 避免重複下載
+	$(this).off("click"); 			// 暫時關閉 click event 避免重複下載
 	$(this).prop("disabled", true); // 暫時禁止按鈕 避免重複下載
+	var pause_button = $(this);		// 把被暫停的按鈕 selector 存下來
 	var works = get_works($(this));
 	parse_img_src(works);
 	get_manga_link(works);
@@ -115,7 +119,10 @@ $(".ext_download").click(function() {
 					// 將不含副檔名的 filename 取出並加上副檔名
 					var filename = work.filenames[i] + "." + work.type;
 
-					// TODO: 這邊需要做一個排隊的功能
+					var download_task = { source_link: download_tasks, filename: filename };
+
+					// 將下載任務排到隊列中
+					schedule_tasks(download_task);
 
 					// 用 source_link 取回 blob
 					request_source(source_link, filename, type, function(blob, filename) {
@@ -127,8 +134,8 @@ $(".ext_download").click(function() {
 
 							// TODO: 想辦法讓被暫停的按鈕恢復
 							// 下載結束後會被呼叫，還原暫停下載按鈕的狀態
-							$(this).on("click"); // 取消關閉 click event
-							$(this).prop("disabled", false); // 取消禁止按鈕
+							pause_button.on("click"); // 取消關閉 click event
+							pause_button.prop("disabled", false); // 取消禁止按鈕
 						});
 					});
 				}
