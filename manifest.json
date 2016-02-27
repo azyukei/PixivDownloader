@@ -5,13 +5,11 @@
 
   "options_page": "options.html",
 
-  "browser_action": {
+  "page_action": {
     "default_icon": {
       "19": "images/icon19.png",
       "38": "images/icon38.png"
-    },
-    "default_title": "Pixiv Downloader",
-    "default_popup": "popup.html"
+    }
   },
 
   "background": {
