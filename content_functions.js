@@ -338,7 +338,7 @@ function schedule_tasks(download_task) {
 	download_tasks.push(download_task);
 	// TODO: popup 要顯示出新的 task
 
-	do_next_task();
+	do_next_task();ㄕ
 }
 
 
