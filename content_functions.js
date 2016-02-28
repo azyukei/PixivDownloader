@@ -176,7 +176,9 @@ function parse_img_src(works) {
 		works[i].date = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 4, 10);
 		works[i].time = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 15, 8);
 		works[i].id = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 24, 8);
-		works[i].id = works[i].id.substr(0, works[i].id.indexOf("_"));
+		if (works[i].id.indexOf("_") > 0) {
+			works[i].id = works[i].id.substr(0, works[i].id.indexOf("_"));
+		} 
 	}
 }
 
@@ -264,7 +266,6 @@ function check_type(work, callback) {
 	xhr.onreadystatechange = function(e) {
 		if (xhr.readyState == 2) {
 			if (xhr.status == 404) {
-
 				work.type = "jpg";
 				blob_type = "image/jpeg";
 			} else if (xhr.status == 200) {
