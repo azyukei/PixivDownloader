@@ -241,11 +241,10 @@ function get_source_link(work) {
  */
 function get_filename(work) {
 	var filename = work.user_name + "-" + work.title + "(" + work.user_id + "-" + work.id + ")";
-	filename = filename.replace(/[\\/:|]/g, " "); // 過濾特殊字元
+	filename = filename.replace(/[\\/:|~]/g, " "); // 過濾特殊字元
 	filename = filename.replace(/[*?"<>]/g, ""); // 過濾特殊字元
 	if (work.multiple) {
 		for (var i = 0; i < work.source_links.length; i++) {
-
 			work.filenames[i] = filename + "_p" + i;
 		}
 	} else {
