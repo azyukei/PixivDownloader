@@ -155,6 +155,6 @@ $(".ext_download").click(function() {
 					add_tasks(download_task);
 				}
 			});
-		});g
+		});
 	}
 });
