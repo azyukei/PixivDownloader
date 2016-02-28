@@ -176,7 +176,7 @@ function parse_img_src(works) {
 		works[i].date = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 4, 10);
 		works[i].time = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 15, 8);
 		works[i].id = works[i].img_src.substr(works[i].img_src.indexOf("img/") + 24, 8);
-		works[i].id = works[i].id.replace("_", "");
+		works[i].id = works[i].id.substr(0, works[i].id.indexOf("_"));
 	}
 }
 
@@ -213,7 +213,8 @@ function get_work_pages(work, callback) {
 
 				callback(work);
 			} else {
-				console.log(xhr.status);
+				console.log(work);
+				console.log("get_work_pages(), status: " + xhr.status);
 			}
 		}
 	} else {
@@ -357,6 +358,9 @@ function request_source(download_task, callback) {
 				type: download_task.blob_type
 			});
 			callback(blob, download_task.filename);
+		} else if (xhr.readyState == 4 && xhr.status != 200) {
+			console.log(download_task);
+			console.log("request_source(), status: " + xhr.readyState + ", " + xhr.status);
 		}
 	}
 	xhr.send(null);
