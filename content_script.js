@@ -117,6 +117,11 @@ $(".ext_download").click(function() {
 			unfinished_works -= 1;
 			continue;
 		}
+		if (works[i].img_src.indexOf("source.pixiv.net") > 0) {
+			// 跳過被禁止的作品
+			unfinished_works -= 1;
+			continue;
+		}
 
 		// 確認每個 work 中的圖片數量
 		get_work_pages(works[i], function(work) {
