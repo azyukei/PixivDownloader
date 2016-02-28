@@ -20,7 +20,7 @@ function download_image(download_url, filename, callback) {
 			filename: filename
 		},
 		function() {
-			callback();
+
 		}
 	);
 }
